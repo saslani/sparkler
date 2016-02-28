@@ -25,10 +25,5 @@
       <unpack>false</unpack>
       <scope>compile</scope>
     </dependencySet>
-    <dependencySet>
-      <outputDirectory>/lib</outputDirectory>
-      <unpack>false</unpack>
-      <scope>provided</scope>
-    </dependencySet>
   </dependencySets>
 </assembly>
