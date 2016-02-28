@@ -8,7 +8,7 @@ dev-db = jdbc:h2:file:./target/db/java-spark-h2-sql2o-template
 exec = exec:java -Dmaven.test.skip=true
 
 go: mvn-compile
-	-PORT=$(port) mvn $(exec) -Dexec.mainClass=Service
+	-mvn $(exec) -Dexec.mainClass=com.testedminds.template.Service -Dexec.args="$(port) $(dev-db) $(username)"
 
 mvn-%:
 	mvn $*
@@ -33,4 +33,4 @@ app-run: mvn-package
 
 app-migrate: mvn-package
 	-echo ./target/$(name)-$(version)-standalone | \
-	xargs -I % bash -c "%/bin/migrate.sh jdbc:h2:file:%/db/java-spark-h2-sql2o-template $(username)" +
+	xargs -I % bash -c "%/bin/migrate.sh jdbc:h2:file:%/db/java-spark-h2-sql2o-template $(username)"
