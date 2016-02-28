@@ -34,3 +34,6 @@ app-run: mvn-package
 app-migrate: mvn-package
 	-echo ./target/$(name)-$(version)-standalone | \
 	xargs -I % bash -c "%/bin/migrate.sh jdbc:h2:file:%/db/java-spark-h2-sql2o-template $(username)"
+
+release: mvn-package
+	tar czvf ./target/$(name)-$(version).tgz -C ./target $(name)-$(version)-standalone
