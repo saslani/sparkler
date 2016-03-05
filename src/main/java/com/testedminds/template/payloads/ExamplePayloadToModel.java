@@ -1,6 +1,6 @@
 package com.testedminds.template.payloads;
 
-import com.testedminds.template.internal.model.Example;
+import com.testedminds.template.model.Example;
 
 /**
  * If you have several objects, models, coming in the json the ExamplePayload will be responsible to separate them and

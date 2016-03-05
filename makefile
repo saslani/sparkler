@@ -1,10 +1,10 @@
 SHELL := /usr/bin/env bash
 
-name = java-spark-h2-sql2o-template
+name = sparkler
 username = sa
 version = 1.0.0-SNAPSHOT
 port = 8081
-dev-db = jdbc:h2:file:./target/db/java-spark-h2-sql2o-template
+dev-db = jdbc:h2:file:./target/db/sparkler
 exec = exec:java -Dmaven.test.skip=true
 
 go: mvn-compile
@@ -29,11 +29,11 @@ app: app-migrate app-run
 
 app-run: mvn-package
 	-echo ./target/$(name)-$(version)-standalone | \
-	xargs -I % bash -c "%/bin/server.sh $(port) jdbc:h2:file:%/db/java-spark-h2-sql2o-template $(username)"
+	xargs -I % bash -c "%/bin/server.sh $(port) jdbc:h2:file:%/db/$(name) $(username)"
 
 app-migrate: mvn-package
 	-echo ./target/$(name)-$(version)-standalone | \
-	xargs -I % bash -c "%/bin/migrate.sh jdbc:h2:file:%/db/java-spark-h2-sql2o-template $(username)"
+	xargs -I % bash -c "%/bin/migrate.sh jdbc:h2:file:%/db/$name $(username)"
 
 release: mvn-package
 	tar czvf ./target/$(name)-$(version).tgz -C ./target $(name)-$(version)-standalone

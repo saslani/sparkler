@@ -1,4 +1,4 @@
-package com.testedminds.template.internal.exceptions;
+package com.testedminds.template.exceptions;
 
 public class ExampleException extends RuntimeException{
   public ExampleException(String message) {
