@@ -1,6 +1,6 @@
 package com.testedminds.template.db;
 
-import com.testedminds.template.model.Example;
+import com.testedminds.template.models.Example;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 

@@ -1,4 +1,4 @@
-package com.testedminds.template.model;
+package com.testedminds.template.models;
 
 public class Example {
   private final String name;

@@ -1,4 +1,4 @@
-package com.testedminds.template.model;
+package com.testedminds.template.models;
 
 import org.junit.Ignore;
 import org.junit.Test;

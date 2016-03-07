@@ -1,4 +1,4 @@
-package com.testedminds.template.payload;
+package com.testedminds.template.payloads;
 
 import org.junit.Ignore;
 import org.junit.Test;

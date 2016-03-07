@@ -2,7 +2,7 @@ package com.testedminds.template;
 
 import com.google.gson.Gson;
 import com.testedminds.template.db.ExampleDao;
-import com.testedminds.template.model.Example;
+import com.testedminds.template.models.Example;
 import com.testedminds.template.payloads.ExamplePayload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
