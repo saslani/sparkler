@@ -1,5 +1,5 @@
 ### What is this template?
-  > This template is designed for a Java 8 project and it uses simple and lightweight 
+  > This template is designed for a Java 8 web application projects and it uses simple and lightweight 
   [sprak](http://sparkjava.com/) micro framework. For the backend, this template uses [flyway](https://flywaydb.org/) 
   which is a database migration tool. 
    
@@ -14,16 +14,17 @@
  
 ### Deployable project
  >You can release this project using command "make release". This will create a gunzip file under "target" directory. 
- You can unzip the file anywhere, run migrage.sh (pass two arguments, url and username) and service.sh 
- (pass 3 arguments: port, url and username) and start using the live app.
+ You can unzip the file anywhere, run migrate.sh (pass two arguments, url and username, or modify to accept password as well) and service.sh 
+ (pass 3 arguments: port, url and username, or modify to accept password as well) and start using the live app.
 
 ### Separation of concerns
- > In this template I tried to make the models be as pure as possible, therefore used the ExampleRow to correspond
+ > In this template I tried to make the models be as pure as possible, therefore, used the ExampleRow to correspond
   to a row in the database, DAO to access the db, and payload to transfer JSON to Model and vice-versa where needed. 
 
    
 ### Architecture
-  >* Language: Java
+  >* Language: Java 8
+  * SDK: 1.8
   * Framework: Spark Java
   * Build tool: maven and make
   * Database: H2Database - Lightweight SQL2o - migrations with Flyway
