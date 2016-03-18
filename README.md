@@ -1,6 +1,6 @@
 ### What is this template?
-  > This template is designed for a Java 8 web application projects and it uses simple and lightweight 
-  [sprak](http://sparkjava.com/) micro framework. For the backend, this template uses [flyway](https://flywaydb.org/) 
+  > This is a reference application designed for a Java 8 RESTful API projects. It is based on the simple and lightweight
+  [spark](http://sparkjava.com/) micro framework. For the backend, this template uses [flyway](https://flywaydb.org/)
   which is a database migration tool. 
    
 ### How to run it?
