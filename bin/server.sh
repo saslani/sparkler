@@ -9,4 +9,4 @@ if [ "$#" -ne 3 ]; then
     exit 1;
 fi
 
-java -cp "$CWD/../lib/*" com.testedminds.template.Server $1 $2 $3
+java -cp "$CWD/../lib/*" com.testedminds.template.Server --port $1 --url $2 --user $3

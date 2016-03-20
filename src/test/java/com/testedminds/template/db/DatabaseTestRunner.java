@@ -18,7 +18,7 @@ public class DatabaseTestRunner {
   @BeforeClass
   public static void setup() throws Exception {
     Files.deleteIfExists(Paths.get(testDbPath + ".mv.db"));
-    Migrate.run(testDbUrl, testDbUser);
+    new Migrate(testDbUrl, testDbUser);
   }
 
   @Before

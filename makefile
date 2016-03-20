@@ -26,7 +26,11 @@ db-user = sa
 db-conn = jdbc:h2:file:./target/db/$(name)
 
 go: pom mvn-compile
-	-mvn $(exec) -Dexec.mainClass=com.testedminds.template.Server -Dexec.args="$(port) $(db-conn) $(db-user)"
+	-mvn $(exec) -Dexec.mainClass=com.testedminds.template.Server -Dexec.args="--port $(port) --url $(db-conn) --user $(db-user)"
+
+help: pom mvn-compile
+	mvn $(exec) -Dexec.mainClass=com.testedminds.template.Server -Dexec.args="--help"
+
 
 ### wrapper for maven commands
 mvn-%:

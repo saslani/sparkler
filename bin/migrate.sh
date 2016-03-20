@@ -9,4 +9,4 @@ if [ "$#" -ne 2 ]; then
     exit 1;
 fi
 
-java -cp "$CWD/../lib/*" com.testedminds.template.db.Migrate $1 $2
+java -cp "$CWD/../lib/*" com.testedminds.template.db.Migrate --url $1 --user $2
