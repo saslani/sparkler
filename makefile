@@ -31,6 +31,8 @@ go: pom mvn-compile
 help: pom mvn-compile
 	mvn $(exec) -Dexec.mainClass=com.testedminds.template.Server -Dexec.args="--help"
 
+repl:
+	mvn groovy:shell
 
 ### wrapper for maven commands
 mvn-%:
