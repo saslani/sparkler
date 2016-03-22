@@ -2,6 +2,7 @@ package com.testedminds.template.handlers;
 
 import com.google.gson.Gson;
 import com.testedminds.template.db.ExampleDao;
+import com.testedminds.template.models.Example;
 import com.testedminds.template.payloads.ExamplePayload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,10 +23,10 @@ final static Logger logger = LoggerFactory.getLogger(PostExampleHandler.class);
   public Object handle(Request req, Response res) throws Exception {
       String body = req.body();
       logger.info("creating an example: " + body);
-      ExamplePayload examplePayload = new Gson().fromJson(body, ExamplePayload.class);
-      long exampleId = dao.createRoom(examplePayload.getType(), examplePayload.getName());
-      logger.info("example created with id: " + exampleId);
+      Example example = new Gson().fromJson(body, Example.class);
+      Example saved = dao.create(example);
+      logger.info("example created with id: " + saved.getId());
       res.status(201);
-      return String.valueOf(exampleId);
+      return String.valueOf(saved.getId());
   }
 }

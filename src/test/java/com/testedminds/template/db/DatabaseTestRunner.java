@@ -11,9 +11,11 @@ import java.nio.file.Paths;
 
 public class DatabaseTestRunner {
   private static String testDbPath = "/tmp/testedminds-test-db";
-  static String testDbUrl = "jdbc:h2:file:" + testDbPath;
-  static String testDbUser = "sa";
-  static Sql2o db = new Sql2o(testDbUrl, testDbUser, null);
+  private static String testDbUrl = "jdbc:h2:file:" + testDbPath;
+  private static String testDbUser = "sa";
+
+  protected Sql2o db = new Sql2o(testDbUrl, testDbUser, null);
+  protected ExampleDao dao = new ExampleDao(db);
 
   @BeforeClass
   public static void setup() throws Exception {

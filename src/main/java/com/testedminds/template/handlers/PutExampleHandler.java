@@ -10,8 +10,8 @@ import spark.Response;
 import spark.Route;
 
 public class PutExampleHandler implements Route {
-  private final ExampleDao dao;
   private final static Logger logger = LoggerFactory.getLogger(PutExampleHandler.class);
+  private final ExampleDao dao;
 
   public PutExampleHandler(ExampleDao dao) {
     this.dao = dao;
@@ -19,13 +19,14 @@ public class PutExampleHandler implements Route {
 
   @Override
   public Object handle(Request req, Response res) throws Exception {
-      Object id = req.params(":id");
-      long exampleId = Long.parseLong(id.toString());
-      String name = req.params(":name");
-      logger.info("updating the name for example with id: " + id);
-      Example home = dao.putExample(exampleId, name);
-      res.status(200);
-      res.type("application/json");
-      return new Gson().toJson(home);
+    Object rId = req.params(":id");
+    long id = Long.parseLong(rId.toString());
+    String name = req.params(":name");
+    String type = req.params(":type");
+    logger.info("updating the name for example with id: " + id);
+    Example updatedExample = dao.update(new Example(id, name, type));
+    res.status(200);
+    res.type("application/json");
+    return new Gson().toJson(updatedExample);
   }
 }

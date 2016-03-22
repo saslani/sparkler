@@ -1,28 +1,58 @@
 package com.testedminds.template.db;
 
+import com.testedminds.template.models.Example;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class ExampleDaoTest extends DatabaseTestRunner {
-//  private ExampleDao homeDao = new ExampleDao(db);
+import java.util.List;
 
-  @Ignore
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+public class ExampleDaoTest extends DatabaseTestRunner {
+
   @Test
   public void shouldCreateExample() {
+    Example notSaved = new Example("foo", "bar");
+    Example saved = dao.create(notSaved);
+    assertTrue(saved.getId() > 0);
+    assertTrue(!saved.equals(notSaved));
   }
 
-  @Ignore
+  @Test
+  public void shouldGetExampleById() {
+    Example saved = dao.create(new Example("foo", "bar"));
+    Example read = dao.get(saved.getId());
+    assertEquals(saved, read);
+  }
+
+  @Test
+  public void shouldReturnNullForMissingEntry() {
+    assertNull(dao.get(-1));
+  }
+
   @Test
   public void shouldUpdateExample() {
+    Example saved = dao.create(new Example("foo", "bar"));
+    Example update = new Example(saved.getId(), "foo", "baz");
+    Example updated = dao.update(update);
+    assertEquals(updated, update);
+    assertEquals(updated, dao.get(saved.getId()));
   }
 
-  @Ignore
   @Test
   public void shouldDeleteExample() {
+    Example saved = dao.create(new Example("foo", "bar"));
+    dao.delete(saved.getId());
+    assertNull(dao.get(saved.getId()));
   }
 
-  @Ignore
   @Test
-  public void shouldReadExample() {
+  public void shouldGetAllExamples() {
+    dao.create(new Example("foo", "bar"));
+    dao.create(new Example("baz", "quux"));
+    List<Example> examples = dao.all();
+    assertEquals(2, examples.size());
   }
 }

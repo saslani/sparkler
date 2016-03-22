@@ -20,7 +20,7 @@ public class DeleteExampleHandler implements Route {
     Object id = req.params(":id");
     long exampleId = Long.parseLong(id.toString());
     logger.info("deleting example with id: " + id);
-    dao.deleteHome(exampleId);
+    dao.delete(exampleId);
     logger.info("example " + id + " deleted");
     res.status(200);
     return "example " + id + " deleted";

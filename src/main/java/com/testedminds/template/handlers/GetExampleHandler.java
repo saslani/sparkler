@@ -20,12 +20,12 @@ public class GetExampleHandler implements Route {
 
   @Override
   public Object handle(Request req, Response res) throws Exception {
-      Object id = req.params(":id");
-      long exampleId = Long.parseLong(id.toString());
-      logger.info("retrieving an example with id: " + id);
-      Example home = dao.getExample(exampleId);
-      res.status(200);
-      res.type("application/json");
-      return new Gson().toJson(home);
+    Object id = req.params(":id");
+    long exampleId = Long.parseLong(id.toString());
+    logger.info("retrieving an example with id: " + id);
+    Example example = dao.get(exampleId);
+    res.status(200);
+    res.type("application/json");
+    return new Gson().toJson(example);
   }
 }
