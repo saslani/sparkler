@@ -19,8 +19,8 @@ public class PutExampleHandler implements Route {
 
   @Override
   public Object handle(Request req, Response res) throws Exception {
-    Object rId = req.params(":id");
-    long id = Long.parseLong(rId.toString());
+    Object requestId = req.params(":id");
+    long id = Long.parseLong(requestId.toString());
     String name = req.params(":name");
     String type = req.params(":type");
     logger.info("updating the name for example with id: " + id);

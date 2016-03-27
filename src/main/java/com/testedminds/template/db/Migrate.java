@@ -14,7 +14,7 @@ public class Migrate {
 
   public Migrate(String url, String user) {
     Flyway flyway = new Flyway();
-    flyway.setDataSource(url, user, null); // TODO: Handle password for a prod-like db.
+    flyway.setDataSource(url, user, null);
     flyway.migrate();
   }
 }

@@ -14,11 +14,11 @@ public class DatabaseTestRunner {
   private static String testDbUrl = "jdbc:h2:file:" + testDbPath;
   private static String testDbUser = "sa";
 
-  protected Sql2o db = new Sql2o(testDbUrl, testDbUser, null);
-  protected ExampleDao dao = new ExampleDao(db);
+  protected static Sql2o db = new Sql2o(testDbUrl, testDbUser, null);
+  protected static ExampleDao dao = new ExampleDao(db);
 
   @BeforeClass
-  public static void setup() throws Exception {
+  public static void migrateDatabase() throws Exception {
     Files.deleteIfExists(Paths.get(testDbPath + ".mv.db"));
     new Migrate(testDbUrl, testDbUser);
   }
@@ -29,5 +29,9 @@ public class DatabaseTestRunner {
       conn.createQuery("truncate table examples").executeUpdate();
       conn.commit();
     }
+  }
+
+  public ExampleDao getExampleDao() {
+    return dao;
   }
 }

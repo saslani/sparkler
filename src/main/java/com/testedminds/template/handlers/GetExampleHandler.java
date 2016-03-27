@@ -20,10 +20,23 @@ public class GetExampleHandler implements Route {
 
   @Override
   public Object handle(Request req, Response res) throws Exception {
-    Object id = req.params(":id");
-    long exampleId = Long.parseLong(id.toString());
-    logger.info("retrieving an example with id: " + id);
-    Example example = dao.get(exampleId);
+    long id;
+    Object requestId = req.params(":id");
+
+    try {
+      id = Long.parseLong(requestId.toString());
+      logger.info(String.format("retrieving an example with id: %d", id));
+    } catch (Exception ex) {
+      logger.warn(ex.getMessage());
+      res.status(400);
+      return String.format("%s is not a valid numeric value.", requestId);
+    }
+
+    Example example = dao.get(id);
+    if (example == null) {
+      res.status(404);
+      return String.format("Example with id %d does not exist.", id);
+    }
     res.status(200);
     res.type("application/json");
     return new Gson().toJson(example);

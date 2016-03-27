@@ -14,11 +14,13 @@ public class Routes {
   public Routes(ExampleDao dao, int serverPort) {
     port(serverPort);
 
-    get("/", (req, res) -> "It's time to sparkle and shine! See the README to get started. Version: " + Version.from(this.getClass()));
+    get("/", (req, res) ->
+        "It's time to sparkle and shine! See the README to get started. Version: " +
+            Version.from(this.getClass()));
 
-    get("/example/:id", new GetExampleHandler(dao));
-    post("/example", new PostExampleHandler(dao));
-    put("/example/:id", new PutExampleHandler(dao));
-    delete("/example/:id", new DeleteExampleHandler(dao));
+    get("/examples/:id", new GetExampleHandler(dao));
+    post("/examples", new PostExampleHandler(dao));
+    put("/examples/:id", new PutExampleHandler(dao));
+    delete("/examples/:id", new DeleteExampleHandler(dao));
   }
 }

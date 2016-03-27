@@ -20,7 +20,7 @@ public class Server {
     String url = opts.url;
     String user = opts.user;
 
-    Sql2o db = new Sql2o(url, user, null); // TODO: Provide a means to handle a db connection with a password.
+    Sql2o db = new Sql2o(url, user, null);
     ExampleDao dao = new ExampleDao(db);
     new Routes(dao, serverPort);
   }
