@@ -24,7 +24,17 @@ public class PutExampleHandler implements Route {
     String name = req.params(":name");
     String type = req.params(":type");
     logger.info("updating the name for example with id: " + id);
-    Example updatedExample = dao.update(new Example(id, name, type));
+    Example expectedExample;
+
+    try {
+        expectedExample = new Example(id, name, type);
+    } catch (Exception e) {
+      logger.warn(e.getMessage());
+      res.status(400);
+      return "Example is not valid";
+    }
+
+    Example updatedExample = dao.update(expectedExample);
     res.status(200);
     res.type("application/json");
     return new Gson().toJson(updatedExample);

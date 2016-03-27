@@ -45,9 +45,19 @@ public class RestfulApiFunctionalTest extends FunctionalTestSuite {
     assertTrue(createdId > 0);
   }
 
-  // postWithInvalidJsonReturnsBadRequest
+  @Test
+  public void postWithInvalidJsonReturnsBadRequest() throws Exception {
+    String response = http.postJson(DEFAULT_HOST_URL + "/examples", "invalid", 400);
+    assertEquals("invalid - Example is not valid", response);
+  }
 
-  // putWithValidJsonAndIdReturnsBadRequest
+  @Test
+  public void putWithValidJsonAndIdReturnsUpdatedExample() throws Exception {
+    Example saved = dao.create(new Example("foo", "bar"));
+    String response = http.putJson(DEFAULT_HOST_URL + "/examples/"+saved.getId(), "junk", 400);
+    assertEquals("Example is not valid", response);
+  }
+
   // putWithMissingIdReturnsNotFound
   // putWithInvalidIdReturnsBadRequest
   // putWithInvalidJsonReturnsBadRequest

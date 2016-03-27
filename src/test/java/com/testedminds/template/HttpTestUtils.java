@@ -4,6 +4,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
@@ -29,6 +30,14 @@ public class HttpTestUtils {
     HttpPost post = new HttpPost(host);
     post.setEntity(input);
     return responseBodyWithCode(expectedStatusCode, post);
+  }
+
+  public String putJson(String host, String body, int expectedStatusCode) throws Exception {
+    StringEntity input = new StringEntity(body);
+    input.setContentType("application/json");
+    HttpPut put = new HttpPut(host);
+    put.setEntity(input);
+    return responseBodyWithCode(expectedStatusCode, put);
   }
 
   private String responseBodyWithCode(int expectedStatusCode, HttpRequestBase request) {

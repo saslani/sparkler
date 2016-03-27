@@ -1,5 +1,7 @@
 package com.testedminds.template.models;
 
+import com.testedminds.template.exceptions.ExampleException;
+
 public class Example {
   private final long id;
   private final String name;
@@ -10,6 +12,8 @@ public class Example {
   }
 
   public Example(long id, String name, String type) {
+    if(name == null || name.trim().isEmpty()) throw new ExampleException("example name is a required field");
+    if(type == null || type.trim().isEmpty()) throw new ExampleException("example type is a required field");
     this.id = id;
     this.name = name;
     this.type = type;
