@@ -22,7 +22,7 @@ public class RestfulApiFunctionalTest extends FunctionalTestSuite {
     Example saved = dao.create(seed);
 
     String response = http.get(DEFAULT_HOST_URL + "/examples/" + saved.getId(), 200);
-    Example fromResponse = new Gson().fromJson(response.toString(), Example.class);
+    Example fromResponse = new Gson().fromJson(response, Example.class);
     assertEquals(saved, fromResponse);
   }
 

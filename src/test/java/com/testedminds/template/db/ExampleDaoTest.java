@@ -1,14 +1,11 @@
 package com.testedminds.template.db;
 
 import com.testedminds.template.models.Example;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ExampleDaoTest extends DatabaseTestRunner {
 
