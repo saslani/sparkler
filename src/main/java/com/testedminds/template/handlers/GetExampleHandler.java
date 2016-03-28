@@ -27,9 +27,10 @@ public class GetExampleHandler implements Route {
       id = Long.parseLong(requestId.toString());
       logger.info(String.format("retrieving an example with id: %d", id));
     } catch (Exception ex) {
-      logger.warn(ex.getMessage());
+      String message = String.format("example id must be a numeric value: '%s'", requestId);
+      logger.warn(message);
       res.status(400);
-      return String.format("%s is not a valid numeric value.", requestId);
+      return message;
     }
 
     Example example = dao.get(id);
