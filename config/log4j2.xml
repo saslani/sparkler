@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- See 12 Factor for stdout rationale: http://12factor.net/logs
+     See the log4j 2 docs for syntax: http://logging.apache.org/log4j/2.x/manual/configuration.html#Properties -->
+<Configuration status="INFO" monitorInterval="30">
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss.SSS} %t] %p %c - %m%n"/>
+    </Console>
+  </Appenders>
+  <Loggers>
+    <Root level="info">
+      <AppenderRef ref="Console"/>
+    </Root>
+    <Logger name="spark.webserver" level="info" />
+    <Logger name="com.testedminds" level="info" />
+    <Logger name="org.eclipse.jetty" level="info" />
+    <Logger name="org.flywaydb" level="info" />
+  </Loggers>
+</Configuration>

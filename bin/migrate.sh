@@ -9,4 +9,9 @@ if [ "$#" -ne 2 ]; then
     exit 1;
 fi
 
-java -cp "$CWD/../lib/*" com.testedminds.template.db.Migrate --url $1 --user $2
+java -cp "$CWD/../lib/*" \
+     -Dlog4j.configurationFile="file://$CWD/../config/log4j2.xml" \
+     -Dlog4j.debug \
+     com.testedminds.template.db.Migrate \
+     --url $1 \
+     --user $2
