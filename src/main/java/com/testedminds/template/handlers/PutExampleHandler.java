@@ -31,8 +31,9 @@ public class PutExampleHandler implements Route {
 
     Example update;
     try {
-      logger.info("updating the name for example with id: " + id);
       update = new Gson().fromJson(req.body(), Example.class);
+      update.validate();
+      logger.info("updating the name for example with id: " + id);
     } catch (Exception e) {
       logger.warn(e.getMessage());
       res.status(400);
