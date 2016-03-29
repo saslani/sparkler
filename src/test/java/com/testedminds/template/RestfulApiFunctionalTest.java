@@ -104,7 +104,7 @@ public class RestfulApiFunctionalTest extends FunctionalTestSuite {
   }
 
   @Test
-  public void deleteWithInvalidIdReturnsBadRequest(){
+  public void deleteWithInvalidIdReturnsBadRequest() throws Exception {
     String response = http.delete(DEFAULT_HOST_URL + "/examples/foo", 400);
     assertEquals("example id must be a numeric value: 'foo'", response);
   }

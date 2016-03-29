@@ -19,41 +19,25 @@ public class PutExampleHandler implements Route {
 
   @Override
   public Object handle(Request req, Response res) throws Exception {
-    Object requestId = req.params(":id");
-    long id;
-    try {
-       id = Long.parseLong(requestId.toString());
-    } catch (Exception ex) {
-      String message = String.format("example id must be a numeric value: '%s'", requestId);
-      logger.warn(message);
-      res.status(400);
-      return message;
-    }
+    // Check that we can GET the Example before we change it.
+    Object result = new GetExampleHandler(dao).handle(req, res);
+    if (res.raw().getStatus() != 200) return result;
 
-//    TODO: refactore / Get
-    Example example = dao.get(id);
-    if (example == null) {
-      res.status(404);
-      return String.format("Example with id %d does not exist.", id);
-    }
-
+    // Example with this id exists, so now attempt the update.
+    long id = Long.parseLong(req.params(":id"));
     Example update;
     try {
-      update = new Gson().fromJson(req.body(), Example.class);
-      update.validate();
-      logger.info("updating the name for example with id: " + id);
+      Example fromJson = new Gson().fromJson(req.body(), Example.class);
+      fromJson.validate();
+      update = new Example(fromJson, id);
     } catch (Exception e) {
       logger.warn(e.getMessage());
       res.status(400);
       return "Example is not valid";
     }
 
+    logger.info("updating example with id: " + id);
     Example updatedExample = dao.update(update);
-//    TODO: this might be a case of 500 since the id exits here
-    if (updatedExample == null) {
-      res.status(404);
-      return String.format("Example with id %d does not exist.", id);
-    }
     res.status(200);
     res.type("application/json");
     return new Gson().toJson(updatedExample);
