@@ -1,4 +1,4 @@
-## Sparkler - A Reference API Microservice based on Spark
+## Sparkler - A REST API microservice reference implementation
 
 In 2002, Clinton Begin released [JPetStore](http://www.theserverside.com/news/thread.tss?thread_id=14243), "a completely rewritten Pet Store application based on Sun's original J2EE Pet Store." For those who don't remember, developing web applications in the early 2000's was a debacle based on J2EE and EJB's. Spring hadn't yet been released, and simple examples of Java web applications like JPetStore were in short supply.
 

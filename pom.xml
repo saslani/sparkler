@@ -6,7 +6,7 @@
   <artifactId>sparkler</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <url>https://github.com/saslani/sparkler</url>
-  <name>Sparkler: </name>
+  <name>Sparkler: A REST API microservice reference implementation</name>
   <description>
   </description>
   <properties>
