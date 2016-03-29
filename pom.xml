@@ -6,7 +6,7 @@
   <artifactId>sparkler</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <url>https://github.com/saslani/sparkler</url>
-  <name>Example Template: Java Spark with H2 and SQL2O</name>
+  <name>Sparkler: </name>
   <description>
   </description>
   <properties>
@@ -17,6 +17,11 @@
       <name>Sarah Aslanifar</name>
       <email>sarah@testedminds.com</email>
       <url>http://www.testedminds.com</url>
+    </developer>
+    <developer>
+      <name>Bobby Norton</name>
+      <email>bobby@testedminds.com</email>
+      <url>http://www.bobbynorton.com</url>
     </developer>
   </developers>
   <inceptionYear>2016</inceptionYear>
