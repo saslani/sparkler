@@ -22,7 +22,7 @@ public class DeleteExampleHandler implements Route {
     long id;
     try {
      id = Long.parseLong(requestId.toString());
-    }catch (Exception ex) {
+    } catch (Exception ex) {
       String message = String.format("example id must be a numeric value: '%s'", requestId);
       logger.warn(message);
       res.status(400);

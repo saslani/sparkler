@@ -20,7 +20,15 @@ public class PutExampleHandler implements Route {
   @Override
   public Object handle(Request req, Response res) throws Exception {
     Object requestId = req.params(":id");
-    long id = Long.parseLong(requestId.toString());
+    long id;
+    try {
+       id = Long.parseLong(requestId.toString());
+    } catch (Exception ex) {
+      String message = String.format("example id must be a numeric value: '%s'", requestId);
+      logger.warn(message);
+      res.status(400);
+      return message;
+    }
 
 //    TODO: refactore / Get
     Example example = dao.get(id);

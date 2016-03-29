@@ -34,7 +34,8 @@ public class RestfulApiFunctionalTest extends FunctionalTestSuite {
 
   @Test
   public void getForInvalidIdReturnsBadRequest() throws Exception {
-    http.get(DEFAULT_HOST_URL + "/examples/foo", 400);
+    String response = http.get(DEFAULT_HOST_URL + "/examples/foo", 400);
+    assertEquals("example id must be a numeric value: 'foo'", response);
   }
 
   @Test
@@ -75,11 +76,9 @@ public class RestfulApiFunctionalTest extends FunctionalTestSuite {
 
   @Test
    public void putWithInvalidIdReturnsBadRequest() throws Exception {
-    Example saved = dao.create(new Example("foo", "bar"));
-    String incompleteExample = "{\"name\" : \"foo\"}";
-
-    String response = http.putJson(DEFAULT_HOST_URL + "/examples/" + saved.getId(), incompleteExample, 400);
-    assertEquals("Example is not valid", response);
+    String goodExample = "{\"id\":1,\"name\":\"foo\",\"type\":\"bar\"}";
+    String response = http.putJson(DEFAULT_HOST_URL + "/examples/junk", goodExample, 400);
+    assertEquals("example id must be a numeric value: 'junk'", response);
   }
 
   @Test
@@ -106,6 +105,7 @@ public class RestfulApiFunctionalTest extends FunctionalTestSuite {
 
   @Test
   public void deleteWithInvalidIdReturnsBadRequest(){
-    http.delete(DEFAULT_HOST_URL + "/examples/foo", 400);
+    String response = http.delete(DEFAULT_HOST_URL + "/examples/foo", 400);
+    assertEquals("example id must be a numeric value: 'foo'", response);
   }
 }
