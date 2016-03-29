@@ -91,7 +91,21 @@ public class RestfulApiFunctionalTest extends FunctionalTestSuite {
     assertEquals("Example is not valid", response);
   }
 
-  // deleteOfMissingIdReturnsNotFound
-  // deleteWithValidIdReturnsOK
-  // deleteWithInvalidIdReturnsBadRequest
+  @Test
+  public void deleteOfMissingIdReturnsNotFound() throws Exception {
+    String response = http.delete(DEFAULT_HOST_URL + "/examples/" + 999, 404);
+    assertTrue(response.contains("999"));
+  }
+
+  @Test
+  public void deleteWithValidIdReturnsOK() throws Exception {
+    Example saved = dao.create(new Example("foo", "bar"));
+    String response = http.delete(DEFAULT_HOST_URL + "/examples/" + saved.getId(), 200);
+    assertEquals("example " + saved.getId() + " deleted", response);
+  }
+
+  @Test
+  public void deleteWithInvalidIdReturnsBadRequest(){
+    http.delete(DEFAULT_HOST_URL + "/examples/foo", 400);
+  }
 }

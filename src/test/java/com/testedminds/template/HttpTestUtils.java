@@ -2,10 +2,7 @@ package com.testedminds.template;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 
@@ -38,6 +35,10 @@ public class HttpTestUtils {
     HttpPut put = new HttpPut(host);
     put.setEntity(input);
     return responseBodyWithCode(expectedStatusCode, put);
+  }
+
+  public String delete(String url, int expectedStatusCode) {
+    return responseBodyWithCode(expectedStatusCode, new HttpDelete(url));
   }
 
   private String responseBodyWithCode(int expectedStatusCode, HttpRequestBase request) {
