@@ -41,6 +41,7 @@ public class PutExampleHandler implements Route {
     }
 
     Example updatedExample = dao.update(update);
+//    TODO: this might be a case of 500 since the id exits here
     if (updatedExample == null) {
       res.status(404);
       return String.format("Example with id %d does not exist.", id);
