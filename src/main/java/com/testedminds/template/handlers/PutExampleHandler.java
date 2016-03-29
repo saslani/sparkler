@@ -21,20 +21,29 @@ public class PutExampleHandler implements Route {
   public Object handle(Request req, Response res) throws Exception {
     Object requestId = req.params(":id");
     long id = Long.parseLong(requestId.toString());
-    String name = req.params(":name");
-    String type = req.params(":type");
-    logger.info("updating the name for example with id: " + id);
-    Example expectedExample;
 
+//    TODO: refactore / Get
+    Example example = dao.get(id);
+    if (example == null) {
+      res.status(404);
+      return String.format("Example with id %d does not exist.", id);
+    }
+
+    Example update;
     try {
-        expectedExample = new Example(id, name, type);
+      logger.info("updating the name for example with id: " + id);
+      update = new Gson().fromJson(req.body(), Example.class);
     } catch (Exception e) {
       logger.warn(e.getMessage());
       res.status(400);
       return "Example is not valid";
     }
 
-    Example updatedExample = dao.update(expectedExample);
+    Example updatedExample = dao.update(update);
+    if (updatedExample == null) {
+      res.status(404);
+      return String.format("Example with id %d does not exist.", id);
+    }
     res.status(200);
     res.type("application/json");
     return new Gson().toJson(updatedExample);

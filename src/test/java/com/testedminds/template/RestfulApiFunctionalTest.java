@@ -2,6 +2,7 @@ package com.testedminds.template;
 
 import com.google.gson.Gson;
 import com.testedminds.template.models.Example;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -65,7 +66,14 @@ public class RestfulApiFunctionalTest extends FunctionalTestSuite {
     assertEquals("Example is not valid", response);
   }
 
-  // putWithMissingIdReturnsNotFound
+  @Test
+   public void putWithMissingIdReturnsNotFound() throws Exception {
+    Example saved = dao.create(new Example("foo", "bar"));
+    Example update = new Example(saved.getId(), "foo", "baz");
+    String response = http.putJson(DEFAULT_HOST_URL + "/examples/" + saved.getId()+1, new Gson().toJson(update), 404);
+    assertEquals("Example with id " + saved.getId()+1 +" does not exist.", response);
+  }
+
   // putWithInvalidIdReturnsBadRequest
   // putWithInvalidJsonReturnsBadRequest
 
