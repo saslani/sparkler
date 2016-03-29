@@ -17,7 +17,7 @@ public class RestfulApiFunctionalTest extends FunctionalTestSuite {
   }
 
   @Test
-  public void getJsonForExistingIdReturnsOK() {
+  public void getJsonForExistingIdReturnsOK() throws Exception {
     Example seed = new Example("foo", "bar");
     Example saved = dao.create(seed);
 
@@ -27,13 +27,13 @@ public class RestfulApiFunctionalTest extends FunctionalTestSuite {
   }
 
   @Test
-  public void getForMissingIdReturnsNotFound() {
+  public void getForMissingIdReturnsNotFound() throws Exception {
     String response = http.get(DEFAULT_HOST_URL + "/examples/42", 404);
     assertTrue(response.contains("42"));
   }
 
   @Test
-  public void getForInvalidIdReturnsBadRequest() {
+  public void getForInvalidIdReturnsBadRequest() throws Exception {
     http.get(DEFAULT_HOST_URL + "/examples/foo", 400);
   }
 
@@ -47,14 +47,21 @@ public class RestfulApiFunctionalTest extends FunctionalTestSuite {
 
   @Test
   public void postWithInvalidJsonReturnsBadRequest() throws Exception {
-    String response = http.postJson(DEFAULT_HOST_URL + "/examples", "invalid", 400);
-    assertEquals("invalid - Example is not valid", response);
+    String response = http.postJson(DEFAULT_HOST_URL + "/examples", "bunk body", 400);
+    assertEquals("Invalid JSON: bunk body", response);
+  }
+
+  @Test
+  public void postWithInvalidExampleReturnsBadRequest() throws Exception {
+    String incompleteExample = "{\"name\" : \"foo\"}";
+    String response = http.postJson(DEFAULT_HOST_URL + "/examples", incompleteExample, 400);
+    assertEquals("Invalid Example: type is a required field", response);
   }
 
   @Test
   public void putWithValidJsonAndIdReturnsUpdatedExample() throws Exception {
     Example saved = dao.create(new Example("foo", "bar"));
-    String response = http.putJson(DEFAULT_HOST_URL + "/examples/"+saved.getId(), "junk", 400);
+    String response = http.putJson(DEFAULT_HOST_URL + "/examples/" + saved.getId(), "junk", 400);
     assertEquals("Example is not valid", response);
   }
 
