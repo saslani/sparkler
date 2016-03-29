@@ -10,4 +10,6 @@ pom.xml.asc
 .hg/
 notes.md
 .idea
+*.iws
 *.iml
+*.ipr

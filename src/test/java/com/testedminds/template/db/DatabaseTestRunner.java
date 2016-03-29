@@ -11,14 +11,16 @@ import java.nio.file.Paths;
 
 public class DatabaseTestRunner {
   private static String testDbPath = "/tmp/testedminds-test-db";
-  static String testDbUrl = "jdbc:h2:file:" + testDbPath;
-  static String testDbUser = "sa";
-  static Sql2o db = new Sql2o(testDbUrl, testDbUser, null);
+  private static String testDbUrl = "jdbc:h2:file:" + testDbPath;
+  private static String testDbUser = "sa";
+
+  protected static Sql2o db = new Sql2o(testDbUrl, testDbUser, null);
+  protected static ExampleDao dao = new ExampleDao(db);
 
   @BeforeClass
-  public static void setup() throws Exception {
+  public static void migrateDatabase() throws Exception {
     Files.deleteIfExists(Paths.get(testDbPath + ".mv.db"));
-    Migrate.run(testDbUrl, testDbUser);
+    new Migrate(testDbUrl, testDbUser);
   }
 
   @Before
@@ -27,5 +29,9 @@ public class DatabaseTestRunner {
       conn.createQuery("truncate table examples").executeUpdate();
       conn.commit();
     }
+  }
+
+  public ExampleDao getExampleDao() {
+    return dao;
   }
 }

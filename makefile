@@ -1,39 +1,74 @@
 SHELL := /usr/bin/env bash
 
-name = sparkler
-username = sa
-version = 1.0.0-SNAPSHOT
-port = 8081
-dev-db = jdbc:h2:file:./target/db/sparkler
+# metadata
+
 exec = exec:java -Dmaven.test.skip=true
 
-go: mvn-compile
-	-mvn $(exec) -Dexec.mainClass=com.testedminds.template.Service -Dexec.args="$(port) $(dev-db) $(username)"
+### pom.xml is the source of truth for project version and name (aka artifactId for maven)
+pom-version = /tmp/pom.version
+pom-name = /tmp/pom.name
 
-mvn-%:
-	mvn $*
+name = $(shell cat $(pom-name))
+version = $(shell cat $(pom-version))
 
-## db targets
+$(pom-version): pom.xml
+	mvn help:evaluate -Dexpression=project.version | grep -v "INFO" > $@
+
+$(pom-name): pom.xml
+	mvn help:evaluate -Dexpression=project.artifactId | grep -v "INFO" > $@
+
+pom: $(pom-name) $(pom-version)
+
+# development targets
+
+port = 8081
+db-user = sa
+db-conn = jdbc:h2:file:./target/db/$(name)
+
+go: pom compile
+	-mvn $(exec) -Dexec.mainClass=com.testedminds.template.Server \
+	-Dlog4j.configurationFile="./config/log4j2.xml" \
+	-Dexec.args="--port $(port) --url $(db-conn) --user $(db-user)"
+
+help: pom compile
+	mvn $(exec) -Dexec.mainClass=com.testedminds.template.Server -Dexec.args="--help"
+
+repl:
+	mvn groovy:shell
+
+deps-tree:
+	mvn dependency:tree -Dverbose
+
+clean:
+	mvn clean
+
+test:
+	mvn test
+
+compile:
+	mvn compile
+
+package:
+	mvn package
 
 ### See http://flywaydb.org/documentation/maven/ for list of flyway commands
-### example: make db-migrate
-db-%:
-	mvn compile flyway:$* -Dflyway.user=$(username) -Dflyway.url=$(dev-db)
+### example: make dev-db-migrate h2-shell
+dev-db-%: pom
+	mvn compile flyway:$* -Dflyway.user=$(db-user) -Dflyway.url=$(db-conn)
 
-h2-shell:
-	-rlwrap mvn $(exec) -Dexec.mainClass=org.h2.tools.Shell -Dexec.args="-url $(dev-db);AUTO_SERVER=TRUE -user $(username)"
+h2-shell: pom
+	-rlwrap mvn $(exec) -Dexec.mainClass=org.h2.tools.Shell \
+	-Dexec.args="-url $(db-conn);AUTO_SERVER=TRUE -user $(db-user)"
 
-## application targets
+# deployable application targets
 
-app: app-migrate app-run
-
-app-run: mvn-package
+server: pom db-migrate
 	-echo ./target/$(name)-$(version)-standalone | \
-	xargs -I % bash -c "%/bin/server.sh $(port) jdbc:h2:file:%/db/$(name) $(username)"
+	xargs -I % bash -c "%/bin/server.sh $(port) jdbc:h2:file:%/db/$(name) $(db-user)"
 
-app-migrate: mvn-package
+db-migrate: pom package
 	-echo ./target/$(name)-$(version)-standalone | \
-	xargs -I % bash -c "%/bin/migrate.sh jdbc:h2:file:%/db/$name $(username)"
+	xargs -I % bash -c "%/bin/migrate.sh jdbc:h2:file:%/db/$(name) $(db-user)"
 
-release: mvn-package
+release: pom package
 	tar czvf ./target/$(name)-$(version).tgz -C ./target $(name)-$(version)-standalone
