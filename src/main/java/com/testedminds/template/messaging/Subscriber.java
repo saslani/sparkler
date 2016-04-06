@@ -155,7 +155,8 @@ public class Subscriber {
 
   private String queue(Channel channel) {
     try {
-      channel.queueDeclare(queue, true, false, false, QueueProperties.defaultProps());
+      boolean durable = true;
+      channel.queueDeclare(queue, durable, false, false, QueueProperties.defaultProps());
     } catch (IOException e) {
       throw new RuntimeException("Could not declare exchange: ", e);
     }
