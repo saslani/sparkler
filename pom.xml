@@ -105,6 +105,14 @@
     </dependency>
     <!-- /database -->
 
+    <!-- messaging -->
+    <dependency>
+      <groupId>com.rabbitmq</groupId>
+      <artifactId>amqp-client</artifactId>
+      <version>3.6.1</version>
+    </dependency>
+    <!-- /messaging-->
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
