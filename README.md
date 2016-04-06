@@ -4,21 +4,41 @@ In 2002, Clinton Begin released [JPetStore](http://www.theserverside.com/news/th
 
 Now nearly 15 years later, in the spirit of JPetStore, Sparkler demonstrates a simple, microservices-based approach to build, test, deploy, and monitor a small API server that allows you to GET, POST, PUT, and DELETE simple domain objects.
 
+Sparkler's domain is an "Example" object with two string attributes.
+
+Sparkler isn't about the domain: It's about demonstrating everything else required to deploy a small but production-ready API, while keeping things fun and productive for developers and ops teams. Complicated domains shouldn't require complicated applications: Sparkler provides a simple foundation on which to build powerful Java-based REST API's.
+
+
 ### Features
 
-* Sparkler's domain is an "Example" object with two string attributes. Sparkler isn't about the domain...it's about demonstrating everything else required to deploy a small but production-ready API.
+RESTful:
+
 * Powered by the [Spark Framework](http://sparkjava.com), a Sinatra-inspired simple and lightweight Java web framework built for rapid development.
-* Ready for continuous delivery with a fully automated build and release for a versioned standalone distribution.
-* Logging configured with Log4j 2, with config file outside of the compiled application allowing redefinition of logging behavior without stopping or redeploying the application.
 * JSON parsing with [Gson](https://github.com/google/gson).
+
+Persistent:
+
 * Automated database migrations with [Flyway](flywaydb.org).
 * Lightweight SQL to object mapping using [sql2o](http://www.sql2o.org).
+
+Developer-friendly:
+
 * Fast, repeatable fully automated functional testing of the public REST API using JUnit and the [Apache HttpClient](https://hc.apache.org/httpcomponents-client-ga).
+* Allows database migrations to be applied before each suite and tables cleared before each test case.
 * Groovy-based REPL for interactive development.
-* Conforms to a [twelve-factor SaaS methodology](http://12factor.net) and is ready for deployment to Heroku, AWS, or other PaaS environments.
-* TDD-friendly with database migrations applied before each suite and tables cleared before each test case.
+
+Ready for [Continuous Delivery](http://continuousdelivery.com):
+
+* Includes an automated deployment to Heroku.
+* Includes a fully automated build for a versioned standalone tarball for other deployment environments.
+* Public API defined by automated tests, providing a meaningful semantic versioning contract.
+* Conforms to a [twelve-factor SaaS methodology](http://12factor.net).
+* Logging configured with Log4j 2. The config file is outside of the compiled application, allowing redefinition of logging behavior without stopping or redeploying the server.
+
 
 ### Getting Started
+
+Clone the repository and `cd` into the application directory.
 
 Start the server: `make server`
 
@@ -67,15 +87,35 @@ git tag -a 1.0.0
 git push --tags
 ```
 
+### Deploying to Heroku
+
+Sparkler includes support for a deployment to Heroku. You'll need the [Heroku Toolbelt](https://toolbelt.heroku.com/) and the heroku-deploy plugin for these steps.
+
+Install the heroku-deploy plugin: `heroku plugins:install https://github.com/heroku/heroku-deploy`
+
+Login with your Heroku credentials: `heroku login`
+
+`cd` into the project directory and create an application: `heroku create`
+
+Pass the name of your application from the previous step to the `deploy-heroku` make target:
+`make deploy-heroku -e HEROKU_APP=polar-sea-31843`
+
+The Procfile is configured to migrate the database and start the application.
+
+Check the logs to ensure everything starts up: `heroku logs --tail`
+
+
+### Deploying via Tarball
+
 #### Create the release artifact
 
-Let's say we're releasing version 1.0.0.
+Let's say we're deploying version 1.0.0.
 
-`make release` will create `target/sparkler-1.0.0.tgz`, a tarball of the `target/sparkler-1.0.0-standalone` directory.
+`make tarball` will create `target/sparkler-1.0.0.tgz` from the `target/sparkler-1.0.0-standalone` directory.
 
 #### Run the release
 
-Untar the release in the location of your choice with `tar xzf sparkler-1.0.0.tgz`:
+Unpack the tarball in the location of your choice with `tar xzf sparkler-1.0.0.tgz`:
 
 ```
 sparkler-1.0.0-standalone/
@@ -96,6 +136,7 @@ It can be useful to be able to switch the logging levels of one of the applicati
 Try hitting an invalid url like http://localhost:8081/examples/fubar. Note the WARN message in the logs.
 
 Edit `config/log4j2.xml` to change the com.testedminds logger level to error. Within 30 seconds (or the value you set in monitorInterval), the application will reload the log4j config and you should see a message in the console that the config was modified. Try visiting the invalid url again, and notice how there is now no log entry.
+
 
 ### FAQ
 

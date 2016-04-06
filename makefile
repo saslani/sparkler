@@ -70,5 +70,19 @@ db-migrate: pom package
 	-echo ./target/$(name)-$(version)-standalone | \
 	xargs -I % bash -c "%/bin/migrate.sh jdbc:h2:file:%/db/$(name) $(db-user)"
 
-release: pom package
+tarball: pom package
 	tar czvf ./target/$(name)-$(version).tgz -C ./target $(name)-$(version)-standalone
+
+# deployment
+
+deploy-heroku: check-env* pom package
+	cd ./target/$(name)-$(version)-standalone && \
+	cp ../../Procfile . && \
+	find ./* -name *.* -a ! -name *$(name)-$(version).jar* | \
+	tr '\n' ':' | \
+	xargs heroku deploy:jar --app $(HEROKU_APP) --jar lib/$(name)-$(version).jar --includes
+
+check-env*:
+	@[[ ! -z "$$HEROKU_APP" ]] || \
+	{ echo "Missing app name. 'export HEROKU_APP=yourname' or 'make deploy-heroku -e HEROKU_APP=yourname'" ; exit 1 ; }
+
