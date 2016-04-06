@@ -20,7 +20,8 @@ public class Publisher {
       factory.setUri(uriString);
       connection = factory.newConnection();
       channel = connection.createChannel();
-      basicProperties = new AMQP.BasicProperties().builder().build();
+//      delivery mode 2 is persistent
+      basicProperties = new AMQP.BasicProperties().builder().deliveryMode(2).build();
       this.exchange = exchange;
       this.queueType = queueType;
     } catch (Exception e) {
@@ -36,12 +37,12 @@ public class Publisher {
     }
   }
 
-  public void publish(String message){
+  public void basicPublish(String message){
     try {
       //Assume that the queueType and routingKey are the same, as in other parts of the project
       channel.basicPublish(exchange, queueType, basicProperties, message.getBytes("UTF-8"));
     } catch (Exception e) {
-      throw new RuntimeException("Could not publish the message: ", e);
+      throw new RuntimeException("Could not basicPublish the message: ", e);
     }
   }
 

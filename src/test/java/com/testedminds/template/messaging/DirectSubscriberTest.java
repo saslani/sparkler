@@ -35,12 +35,12 @@ public class DirectSubscriberTest {
     final Subscriber sub = new Subscriber(successHandler, Environment.amqpUri(), "profile", "direct", "update");
     final Publisher messenger = messenger(sub);
 
-    // publish messages to the consumer we just declared.
+    // basicPublish messages to the consumer we just declared.
     List<Callable<Object>> tasks = new ArrayList<>();
     for (int i = 0; i < numMessages; i++) {
       tasks.add(
               Executors.callable(() -> {
-                messenger.publish(MESSAGE);
+                messenger.basicPublish(MESSAGE);
               }));
     }
 
