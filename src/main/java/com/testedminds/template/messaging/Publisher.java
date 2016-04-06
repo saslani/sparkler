@@ -28,14 +28,6 @@ public class Publisher {
     }
   }
 
-  public void fanout(){
-    try {
-      channel.exchangeDeclare(exchange, queueType);
-    } catch (IOException e) {
-      throw new RuntimeException("Could not create fanout: ", e);
-    }
-  }
-
   public void purge() {
     try {
       channel.queuePurge(queueType);
