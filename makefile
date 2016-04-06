@@ -22,7 +22,8 @@ pom: $(pom-name) $(pom-version)
 # development targets
 
 port = 8081
-db-conn = jdbc:h2:file:./target/db/$(name)
+dev-db-conn = jdbc:h2://file/./target/db/$(name)
+server-db-conn = jdbc:h2://file/%/db/$(name)
 
 repl:
 	mvn groovy:shell
@@ -45,33 +46,36 @@ package:
 ### See http://flywaydb.org/documentation/maven/ for list of flyway commands
 ### example: make dev-db-migrate h2-shell
 dev-db-%: pom
-	mvn compile flyway:$* -Dflyway.url=$(db-conn)
+	mvn compile flyway:$* -Dflyway.url=$(dev-db-conn)
 
 h2-shell: pom
 	-rlwrap mvn $(exec) -Dexec.mainClass=org.h2.tools.Shell \
-	-Dexec.args="-url $(db-conn);AUTO_SERVER=TRUE"
+	-Dexec.args="-url $(dev-db-conn);AUTO_SERVER=TRUE"
 
 # deployable application targets
 
 server: pom db-migrate
 	-echo ./target/$(name)-$(version)-standalone | \
-	xargs -I % bash -c "PORT=$(port) DB_URL=jdbc:h2:file:%/db/$(name) %/bin/server.sh"
+	xargs -I % bash -c "PORT=$(port) JDBC_DATABASE_URL=$(server-db-conn) %/bin/server.sh"
 
 db-migrate: pom package
 	-echo ./target/$(name)-$(version)-standalone | \
-	xargs -I % bash -c "DB_URL=jdbc:h2:file:%/db/$(name) %/bin/migrate.sh"
+	xargs -I % bash -c "JDBC_DATABASE_URL=$(server-db-conn) %/bin/migrate.sh"
 
 tarball: pom package
 	tar czvf ./target/$(name)-$(version).tgz -C ./target $(name)-$(version)-standalone
 
 # deployment
 
-deploy-heroku: check-env* pom package
+heroku-deploy: check-env* clean pom package
 	cd ./target/$(name)-$(version)-standalone && \
 	cp ../../Procfile . && \
 	find ./* -name *.* -a ! -name *$(name)-$(version).jar* | \
 	tr '\n' ':' | \
 	xargs heroku deploy:jar --app $(HEROKU_APP) --jar lib/$(name)-$(version).jar --includes
+
+heroku-jdbc-url:
+	heroku run echo \$JDBC_DATABASE_URL
 
 check-env*:
 	@[[ ! -z "$$HEROKU_APP" ]] || \

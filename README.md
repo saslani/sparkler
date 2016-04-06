@@ -97,12 +97,15 @@ Login with your Heroku credentials: `heroku login`
 
 `cd` into the project directory and create an application: `heroku create`
 
-Pass the name of your application from the previous step to the `deploy-heroku` make target:
-`make deploy-heroku -e HEROKU_APP=polar-sea-31843`
+Set a `HEROKU_APP` environment variable with the name of your project: `export HEROKU_APP=polar-sea-31843`
 
-The Procfile is configured to migrate the database and start the application.
+Deploy the project: `make heroku-deploy`
 
-Check the logs to ensure everything starts up: `heroku logs --tail`
+The included Procfile migrates the database before starting the application to ensure things stay up to date.
+
+Check the logs to ensure everything starts up correctly: `heroku logs --tail`
+
+If everything looks good, try out the Public API described above.
 
 
 ### Deploying via Tarball
@@ -126,9 +129,9 @@ sparkler-1.0.0-standalone/
 
 Switch to the directory where you untarred your distribution: `cd sparkler-1.0.0-standalone`
 
-Run database migrations (assuming a local H2 database for the moment): `bin/migrate.sh jdbc:h2:file:./db/sparkler sa`
+Run database migrations (assuming a local H2 database for the moment): `JDBC_DATABASE_URL=jdbc:h2://file/./db/sparkler bin/migrate.sh`
 
-Start the service: `bin/server.sh 8081 jdbc:h2:file:./db/sparkler sa`
+Start the service: `PORT=8081 JDBC_DATABASE_URL=jdbc:h2://file/./db/sparkler bin/server.sh`
 
 #### Change the Log4j configuration at runtime (optional)
 
