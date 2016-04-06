@@ -1,7 +1,6 @@
 package com.testedminds.template.messaging;
 
 import com.testedminds.template.config.Environment;
-import com.testedminds.template.handlers.LoggingHandler;
 import com.testedminds.template.handlers.MessageHandler;
 import org.junit.Test;
 
@@ -37,12 +36,12 @@ public class FanoutSubscriberTest {
     final Subscriber sub = new Subscriber(successHandler, Environment.amqpUri(), EXCHANGE_NAME, EXCHANGE_TYPE, "");
     final Publisher messenger = messenger(sub);
 
-    // publish messages to the consumer we just declared.
+    // basicPublish messages to the consumer we just declared.
     List<Callable<Object>> tasks = new ArrayList<>();
     for (int i = 0; i < numMessages; i++) {
       tasks.add(
               Executors.callable(() -> {
-                messenger.publish(MESSAGE);
+                messenger.basicPublish(MESSAGE);
               }));
     }
 
@@ -64,7 +63,7 @@ public class FanoutSubscriberTest {
   private Publisher messenger(final Subscriber sub) {
     final Publisher messenger = new Publisher(EXCHANGE_NAME, "", Environment.AMQP_LOCALHOST);
     // Empty the queue from previous test runs
-    messenger.publish(MESSAGE);
+    messenger.basicPublish(MESSAGE);
 
     new Thread(sub::deliveryLoop).start();
     return messenger;
