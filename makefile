@@ -22,16 +22,7 @@ pom: $(pom-name) $(pom-version)
 # development targets
 
 port = 8081
-db-user = sa
 db-conn = jdbc:h2:file:./target/db/$(name)
-
-go: pom compile
-	-mvn $(exec) -Dexec.mainClass=com.testedminds.template.Server \
-	-Dlog4j.configurationFile="./config/log4j2.xml" \
-	-Dexec.args="--port $(port) --url $(db-conn) --user $(db-user)"
-
-help: pom compile
-	mvn $(exec) -Dexec.mainClass=com.testedminds.template.Server -Dexec.args="--help"
 
 repl:
 	mvn groovy:shell
@@ -54,21 +45,21 @@ package:
 ### See http://flywaydb.org/documentation/maven/ for list of flyway commands
 ### example: make dev-db-migrate h2-shell
 dev-db-%: pom
-	mvn compile flyway:$* -Dflyway.user=$(db-user) -Dflyway.url=$(db-conn)
+	mvn compile flyway:$* -Dflyway.url=$(db-conn)
 
 h2-shell: pom
 	-rlwrap mvn $(exec) -Dexec.mainClass=org.h2.tools.Shell \
-	-Dexec.args="-url $(db-conn);AUTO_SERVER=TRUE -user $(db-user)"
+	-Dexec.args="-url $(db-conn);AUTO_SERVER=TRUE"
 
 # deployable application targets
 
 server: pom db-migrate
 	-echo ./target/$(name)-$(version)-standalone | \
-	xargs -I % bash -c "%/bin/server.sh $(port) jdbc:h2:file:%/db/$(name) $(db-user)"
+	xargs -I % bash -c "PORT=$(port) DB_URL=jdbc:h2:file:%/db/$(name) %/bin/server.sh"
 
 db-migrate: pom package
 	-echo ./target/$(name)-$(version)-standalone | \
-	xargs -I % bash -c "%/bin/migrate.sh jdbc:h2:file:%/db/$(name) $(db-user)"
+	xargs -I % bash -c "DB_URL=jdbc:h2:file:%/db/$(name) %/bin/migrate.sh"
 
 tarball: pom package
 	tar czvf ./target/$(name)-$(version).tgz -C ./target $(name)-$(version)-standalone
@@ -85,4 +76,3 @@ deploy-heroku: check-env* pom package
 check-env*:
 	@[[ ! -z "$$HEROKU_APP" ]] || \
 	{ echo "Missing app name. 'export HEROKU_APP=yourname' or 'make deploy-heroku -e HEROKU_APP=yourname'" ; exit 1 ; }
-

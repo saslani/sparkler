@@ -1,20 +1,17 @@
 package com.testedminds.template.db;
 
-import com.beust.jcommander.JCommander;
-import com.testedminds.template.CommandLineOptions;
 import org.flywaydb.core.Flyway;
 
 public class Migrate {
 
-  public static void main(String[] args) {
-    CommandLineOptions opts = new CommandLineOptions();
-    new JCommander(opts, args);
-    new Migrate(opts.url, opts.user);
+  public Migrate(String url) {
+    Flyway flyway = new Flyway();
+    flyway.setDataSource(url, null, null);
+    flyway.migrate();
   }
 
-  public Migrate(String url, String user) {
-    Flyway flyway = new Flyway();
-    flyway.setDataSource(url, user, null);
-    flyway.migrate();
+  public static void main(String[] args) {
+    String url = System.getenv("DB_URL");
+    new Migrate(url);
   }
 }
