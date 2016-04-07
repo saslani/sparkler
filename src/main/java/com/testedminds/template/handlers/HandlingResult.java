@@ -31,4 +31,12 @@ public class HandlingResult {
   public static HandlingResult success() {
     return new HandlingResult(SUCCESSFUL, "");
   }
+
+  public String type() {
+    return type;
+  }
+
+  public static boolean isSuccess(String type) {
+    return type.equals(SUCCESSFUL);
+  }
 }
