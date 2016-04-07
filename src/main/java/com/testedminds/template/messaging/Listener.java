@@ -1,12 +1,15 @@
 package com.testedminds.template.messaging;
 
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.QueueingConsumer;
+import com.rabbitmq.client.*;
+import com.testedminds.template.handlers.HandlingResults;
 import com.testedminds.template.handlers.MessageHandler;
+import de.svenjacobs.loremipsum.LoremIpsum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Listener {
   private final ConnectionFactory factory = new ConnectionFactory();
@@ -37,14 +40,51 @@ public class Listener {
   }
 
   private String getMessage(String corrId) throws InterruptedException {
-    while(true){
+    while (true) {
       QueueingConsumer.Delivery delivery = consumer.nextDelivery(timeout);
-      if(delivery == null) throw new RuntimeException(String.format("Server did not respond in %d seconds.", timeout/1000));
-      if(delivery.getProperties().getCorrelationId().equals(corrId)) return new String(delivery.getBody());
+      if (delivery == null)
+        throw new RuntimeException(String.format("Server did not respond in %d seconds.", timeout / 1000));
+      if (delivery.getProperties().getCorrelationId().equals(corrId)) return new String(delivery.getBody());
     }
   }
 
   public void close() throws Exception {
     connection.close();
+  }
+
+//  TODO: not sure how the call works
+//  TODO: this cold be useful
+  public void call() {
+    String message = new LoremIpsum().getWords(15);;
+    String corrId = java.util.UUID.randomUUID().toString();
+
+    try {
+      AMQP.BasicProperties properties = new AMQP.BasicProperties()
+              .builder()
+              .priority(2)
+              .correlationId(corrId)
+              .replyTo(replyQueueName)
+              .build();
+
+      channel.basicPublish("", requestQueueName, properties, message.getBytes());
+
+      // get a count of messages as the first message, then just wait for the rest
+      int count = Integer.parseInt(getMessage(corrId));
+      System.out.printf("Receiving %d messages\n", count);
+      Map<String, Object> headers = new HashMap<>();
+      HandlingResults results = new HandlingResults();
+      for (int i=0; i<count; i++) {
+        results.add(handler.handle(getMessage(corrId), headers));
+        if (i % 1000 == 0) update(i, count);
+      }
+      System.out.println(results.printSummary());
+
+    } catch (Exception e) {
+      throw new RuntimeException("Could not download historic conversations. ", e);
+    }
+  }
+
+  private void update(int processed, int count) {
+    System.out.printf("Processed %d out of %d requests\n", processed, count);
   }
 }
