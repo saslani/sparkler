@@ -91,13 +91,21 @@ git push --tags
 
 Sparkler includes support for a deployment to Heroku. You'll need the [Heroku Toolbelt](https://toolbelt.heroku.com/) and the heroku-deploy plugin for these steps.
 
+#### Initial Setup
+
+This will get you set up with a free-tier version of the application on Heroku:
+
 Install the heroku-deploy plugin: `heroku plugins:install https://github.com/heroku/heroku-deploy`
 
 Login with your Heroku credentials: `heroku login`
 
 `cd` into the project directory and create an application: `heroku create`
 
-Set a `HEROKU_APP` environment variable with the name of your project: `export HEROKU_APP=polar-sea-31843`
+Add Postgres: `heroku addons:add heroku-postgresql:dev`
+
+#### Deploy
+
+At the start of your session, set a `HEROKU_APP` environment variable with the name of your project: `export HEROKU_APP=polar-sea-31843`. Alternately, you can set this variable in your `makefile` and commit it if you'll be using the same Heroku app over time.
 
 Deploy the project: `make heroku-deploy`
 
