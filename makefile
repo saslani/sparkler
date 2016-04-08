@@ -11,10 +11,13 @@ pom-name = /tmp/pom.name
 name = $(shell cat $(pom-name))
 version = $(shell cat $(pom-version))
 
-$(pom-version): pom.xml
+$(pom-version): $(pom.name)
 	mvn help:evaluate -Dexpression=project.version | grep -v "INFO" > $@
 
 $(pom-name): pom.xml
+# Force maven to download all dependencies before attempting to read project metadata
+	mvn dependency:resolve
+	mvn help:evaluate -Dexpression=project.groupId
 	mvn help:evaluate -Dexpression=project.artifactId | grep -v "INFO" > $@
 
 pom: $(pom-name) $(pom-version)

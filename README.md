@@ -1,12 +1,14 @@
 ## Sparkler - A REST API microservice reference implementation
 
-In 2002, Clinton Begin released [JPetStore](http://www.theserverside.com/news/thread.tss?thread_id=14243), "a completely rewritten Pet Store application based on Sun's original J2EE Pet Store." For those who don't remember, developing web applications in the early 2000's was a debacle based on J2EE and EJB's. Spring hadn't yet been released, and simple examples of Java web applications like JPetStore were in short supply.
+Sparkler isn't a library, and it isn't a framework. It's a Java application that illustrates some REST API design and workflow principles in action. JPetStore served a similar purpose for Java-based web applications in 2002.
 
-Now nearly 15 years later, in the spirit of JPetStore, Sparkler demonstrates a simple, microservices-based approach to build, test, deploy, and monitor a small API server that allows you to GET, POST, PUT, and DELETE simple domain objects.
+Back then, Clinton Begin released [JPetStore](http://www.theserverside.com/news/thread.tss?thread_id=14243), "a completely rewritten Pet Store application based on Sun's original J2EE Pet Store." For those who don't remember, developing web applications in the early 2000's was a debacle based on J2EE and EJB's. Spring hadn't yet been released, and simple examples of Java web applications like JPetStore were in short supply.
+
+In the spirit of JPetStore, Sparkler demonstrates a simple, microservices-based approach to build, test, deploy, and monitor a small API server that allows you to GET, POST, PUT, and DELETE simple domain objects.
 
 Sparkler's domain is an "Example" object with two string attributes.
 
-Sparkler isn't about the domain: It's about demonstrating everything else required to deploy a small but production-ready API, while keeping things fun and productive for developers and ops teams. Complicated domains shouldn't require complicated applications: Sparkler provides a simple foundation on which to build powerful Java-based REST API's.
+Sparkler isn't about the domain: It's about demonstrating everything else required to deploy a small but production-ready API, while keeping things fun and productive for developers and ops teams. Complicated domains shouldn't require complicated applications: Sparkler provides a simple foundation on which to build powerful Java-based REST API's. You can easily extend the application and make it your own.
 
 
 ### Features
@@ -89,29 +91,43 @@ git push --tags
 
 ### Deploying to Heroku
 
-Sparkler includes support for a deployment to Heroku. You'll need the [Heroku Toolbelt](https://toolbelt.heroku.com/) and the heroku-deploy plugin for these steps.
+Sparkler includes support for a deployment to Heroku. The artifacts deployed to Heroku are the same as those deployed via the tarball deployment described below.
 
-#### Initial Setup
+#### Heroku Toolbelt
 
-This will get you set up with a free-tier version of the application on Heroku:
+You'll need the [Heroku Toolbelt](https://toolbelt.heroku.com/) and the heroku-deploy plugin for these steps.
 
-Install the heroku-deploy plugin: `heroku plugins:install https://github.com/heroku/heroku-deploy`
+OS X users can install the Toolbelt via Homebrew:
+
+```
+brew update
+brew install heroku-toolbelt
+```
+
+Install the heroku-deploy plugin to support running from a jar instead of compiling on Heroku: `heroku plugins:install https://github.com/heroku/heroku-deploy`
+
+#### App Setup
+
+Set up a free-tier version of the application on Heroku:
 
 Login with your Heroku credentials: `heroku login`
 
 `cd` into the project directory and create an application: `heroku create`
+Take note of the name that Heroku assigns.
 
-Add Postgres: `heroku addons:add heroku-postgresql:dev`
+Add a Postgres database: `heroku addons:create heroku-postgresql:hobby-dev`
 
-#### Deploy
+#### Ship It!
 
-At the start of your session, set a `HEROKU_APP` environment variable with the name of your project: `export HEROKU_APP=polar-sea-31843`. Alternately, you can set this variable in your `makefile` and commit it if you'll be using the same Heroku app over time.
+At the start of your session, set a `HEROKU_APP` environment variable with the name of your project. For example, if Heroku had assigned an application name of "polar-sea-31843", you could run `export HEROKU_APP=polar-sea-31843`. You can also set this variable in your `makefile` and commit it if you'll be using the same Heroku app over time.
 
 Deploy the project: `make heroku-deploy`
 
 The included Procfile migrates the database before starting the application to ensure things stay up to date.
 
 Check the logs to ensure everything starts up correctly: `heroku logs --tail`
+
+Open up the app and ensure you see the welcome message: `heroku apps:open`
 
 If everything looks good, try out the Public API described above.
 
@@ -150,6 +166,20 @@ Edit `config/log4j2.xml` to change the com.testedminds logger level to error. Wi
 
 
 ### FAQ
+
+#### What next?
+
+Sparkler will eventually be distributed as a template. For now, you can extend the application by reinitializing the git repository:
+
+```
+rm -rf .git
+git init
+git add .
+git commit -am "Initial import"
+```
+
+You can now customize the application and make it your own.
+
 
 #### make?
 
