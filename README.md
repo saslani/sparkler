@@ -28,7 +28,7 @@ Sparkler isn't about the domain: It's about demonstrating everything else requir
     * [make?](#make)
     * [Have you tested developing on Windows?](#have-you-tested-developing-on-windows)
     * [This is interesting. How can I contribute?](#this-is-interesting-how-can-i-contribute)
-* [Useful Links](#useful-links)    
+* [Useful Links](#useful-links)
 
 ### Features
 
@@ -88,7 +88,11 @@ See the [functional tests](./src/test/java/com/testedminds/template/RestfulApiFu
 
 ### Releasing
 
-#### Update the change log
+#### Create a branch for the release
+
+`git co -b release-1.0.0`
+
+#### Update CHANGELOG.md with notable changes
 
 #### Update the version in pom.xml
 
@@ -99,19 +103,37 @@ Versioning follows [Semantic Versioning](http://semver.org) conventions: major.m
 * Backwards compatible features are a minor revision.
 * Follow the SemVer spec for anything else.
 
-Commit the appropriate version change: 
+Commit the appropriate version change:
 
 ```
-git commit -am "Update version for release"
+git commit -am "Update version and changelog for release"
 git push
+```
+
+#### Merge the release branch to master
+
+You might also want to delete your local copy of the branch:
+
+```
+git fetch -p
+git branch -d release-1.0.0
 ```
 
 #### Tag the release
 
 ```
-git tag -a v1.0.0
+git tag v1.0.0
 git push --tags
 ```
+
+#### Update the pom.xml with the next SNAPSHOT version
+
+```
+git commit -am "Increment version to SNAPSHOT"
+git push
+```
+
+You now have a tagged release and are ready to iterate on the next.
 
 
 ### Deploying to Heroku
