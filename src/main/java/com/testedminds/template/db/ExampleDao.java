@@ -17,12 +17,11 @@ public class ExampleDao {
   public Example create(Example e) {
     long id;
     try (Connection conn = db.open()) {
-      id = (long) conn.createQuery("insert into examples (e_type, e_name) values (:e_type, :e_name)")
+      id = (long) conn.createQuery("insert into examples (e_type, e_name) values (:e_type, :e_name)", true)
           .addParameter("e_type", e.getType())
           .addParameter("e_name", e.getName())
           .executeUpdate()
           .getKey();
-      conn.commit();
     }
     return new Example(e, id);
   }
@@ -51,11 +50,10 @@ public class ExampleDao {
   }
 
   public void delete(long id) {
-    try (Connection conn = db.beginTransaction()) {
+    try (Connection conn = db.open()) {
       conn.createQuery("delete from examples where id=:id")
           .addParameter("id", id)
           .executeUpdate();
-      conn.commit();
     }
   }
 

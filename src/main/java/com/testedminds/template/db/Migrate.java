@@ -1,20 +1,21 @@
 package com.testedminds.template.db;
 
-import com.beust.jcommander.JCommander;
-import com.testedminds.template.CommandLineOptions;
 import org.flywaydb.core.Flyway;
+
+import java.util.Map;
 
 public class Migrate {
 
-  public static void main(String[] args) {
-    CommandLineOptions opts = new CommandLineOptions();
-    new JCommander(opts, args);
-    new Migrate(opts.url, opts.user);
+  public Migrate(String url) throws Exception {
+    Map<String, String> params = DatabaseUrl.params(url);
+    String dataSourceUrl = JdbcUrl.build(params);
+    Flyway flyway = new Flyway();
+    flyway.setDataSource(dataSourceUrl, params.get("user"), params.get("password"));
+    flyway.migrate();
   }
 
-  public Migrate(String url, String user) {
-    Flyway flyway = new Flyway();
-    flyway.setDataSource(url, user, null);
-    flyway.migrate();
+  public static void main(String[] args) throws Exception {
+    String url = System.getenv("JDBC_DATABASE_URL");
+    new Migrate(url);
   }
 }
