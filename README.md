@@ -211,3 +211,7 @@ Flyway is a simple solution to a simple problem:
 * [flyway for an existing database setup](http://flywaydb.org/documentation/existing.html)
 * [Why migrate?](http://flywaydb.org/getstarted/why.html)
 
+## License
+
+Released under the [Apache License, Version 2.0](./LICENSE.txt)
+[Credits](./CREDITS.txt)
