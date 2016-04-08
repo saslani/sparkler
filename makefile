@@ -77,8 +77,8 @@ heroku-deploy: check-env* clean pom package
 	tr '\n' ':' | \
 	xargs heroku deploy:jar --app $(HEROKU_APP) --jar lib/$(name)-$(version).jar --includes
 
-heroku-jdbc-url:
-	heroku run echo \$JDBC_DATABASE_URL
+heroku-jdbc-url: check-env*
+	heroku run echo \$$JDBC_DATABASE_URL --app $(HEROKU_APP)
 
 check-env*:
 	@[[ ! -z "$$HEROKU_APP" ]] || \
