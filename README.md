@@ -21,7 +21,7 @@
     * [Useful Links](#useful-links)    
 * [Licensing](#licensing)
 
-<div id='sparkler'>
+<a name='sparkler'>
 ## Sparkler - A REST API microservice reference implementation
 
 Sparkler isn't a library, and it isn't a framework. It's a Java application that illustrates some REST API design and workflow principles in action. JPetStore served a similar purpose for Java-based web applications in 2002.
@@ -33,9 +33,9 @@ In the spirit of JPetStore, Sparkler demonstrates a simple, microservices-based 
 Sparkler's domain is an "Example" object with two string attributes.
 
 Sparkler isn't about the domain: It's about demonstrating everything else required to deploy a small but production-ready API, while keeping things fun and productive for developers and ops teams. Complicated domains shouldn't require complicated applications: Sparkler provides a simple foundation on which to build powerful Java-based REST API's. You can easily extend the application and make it your own.
-</div>
+</a>
 
-<div id='features'>
+<a name='features'>
 ### Features
 
 RESTful:
@@ -61,9 +61,9 @@ Ready for [Continuous Delivery](http://continuousdelivery.com):
 * Public API defined by automated tests, providing a meaningful semantic versioning contract.
 * Conforms to a [twelve-factor SaaS methodology](http://12factor.net).
 * Logging configured with Log4j 2. The config file is outside of the compiled application, allowing redefinition of logging behavior without stopping or redeploying the server.
-</div>
+</a>
 
-<div id='getting-started'>
+<a name='getting-started'>
 ### Getting Started
 
 Clone the repository and `cd` into the application directory.
@@ -75,9 +75,9 @@ This starts up the server in the same manner that will be used in the actual rel
 Visit the welcome page: http://localhost:8081
 
 See the `makefile` for other automation targets.
-</div>
+</a>
 
-<div id='public-api'>
+<a name='public-api'>
 ### Public API
 
 POST: http://localhost:8081/examples
@@ -95,12 +95,12 @@ PUT: http://localhost:8081/examples/1 with JSON as in POST
 DELETE: http://localhost:8081/examples/1
 
 See the [functional tests](./src/test/java/com/testedminds/template/RestfulApiFunctionalTest.java) for the full contract with Examples.
-</div>
+</a>
 
-<div id='releasing'>
+<a name='releasing'>
 ### Releasing
 
-<div id='update-the-version-in-pom'>
+<a name='update-the-version-in-pom'>
 #### Update the version in pom.xml
 
 Versioning follows [Semantic Versioning](http://semver.org) conventions: major.minor.patch
@@ -118,14 +118,14 @@ git push
 git tag -a 1.0.0
 git push --tags
 ```
-</div>
-</div>
-<div id='deploying-to-heroku'>
+</a>
+</a>
+<a name='deploying-to-heroku'>
 ### Deploying to Heroku
 
 Sparkler includes support for a deployment to Heroku. The artifacts deployed to Heroku are the same as those deployed via the tarball deployment described below.
 
-<div id='heroku-toolbelt'>
+<a name='heroku-toolbelt'>
 #### Heroku Toolbelt
 
 You'll need the [Heroku Toolbelt](https://toolbelt.heroku.com/) and the heroku-deploy plugin for these steps.
@@ -138,8 +138,8 @@ brew install heroku-toolbelt
 ```
 
 Install the heroku-deploy plugin to support running from a jar instead of compiling on Heroku: `heroku plugins:install https://github.com/heroku/heroku-deploy`
-</div>
-<div id='app-setup'>
+</a>
+<a name='app-setup'>
 #### App setup
 
 Set up a free-tier version of the application on Heroku:
@@ -150,8 +150,8 @@ Login with your Heroku credentials: `heroku login`
 Take note of the name that Heroku assigns.
 
 Add a Postgres database: `heroku addons:create heroku-postgresql:hobby-dev`
-</div>
-<div id='ship-it'>
+</a>
+<a name='ship-it'>
 #### Ship it!
 
 At the start of your session, set a `HEROKU_APP` environment variable with the name of your project. For example, if Heroku had assigned an application name of "polar-sea-31843", you could run `export HEROKU_APP=polar-sea-31843`. You can also set this variable in your `makefile` and commit it if you'll be using the same Heroku app over time.
@@ -165,20 +165,20 @@ Check the logs to ensure everything starts up correctly: `heroku logs --tail`
 Open up the app and ensure you see the welcome message: `heroku apps:open`
 
 If everything looks good, try out the Public API described above.
-</div>
-</div>
+</a>
+</a>
 
-<div id='deploying-via-tarball'>
+<a name='deploying-via-tarball'>
 ### Deploying via Tarball
 
-<div id='create-the-release-artifact'>
+<a name='create-the-release-artifact'>
 #### Create the release artifact
 
 Let's say we're deploying version 1.0.0.
 
 `make tarball` will create `target/sparkler-1.0.0.tgz` from the `target/sparkler-1.0.0-standalone` directory.
-</div>
-<div id='run-the-release'>
+</a>
+<a name='run-the-release'>
 #### Run the release
 
 Unpack the tarball in the location of your choice with `tar xzf sparkler-1.0.0.tgz`:
@@ -195,18 +195,18 @@ Switch to the directory where you untarred your distribution: `cd sparkler-1.0.0
 Run database migrations (assuming a local H2 database for the moment): `JDBC_DATABASE_URL=jdbc:h2://file/./db/sparkler bin/migrate.sh`
 
 Start the service: `PORT=8081 JDBC_DATABASE_URL=jdbc:h2://file/./db/sparkler bin/server.sh`
-</div>
-<div id='change-the-log4j-configuration-at-runtime'>
+</a>
+<a name='change-the-log4j-configuration-at-runtime'>
 #### Change the Log4j configuration at runtime (optional)
 
 It can be useful to be able to switch the logging levels of one of the applications sub-systems without shutting down.
 Try hitting an invalid url like http://localhost:8081/examples/fubar. Note the WARN message in the logs.
 
 Edit `config/log4j2.xml` to change the com.testedminds logger level to error. Within 30 seconds (or the value you set in monitorInterval), the application will reload the log4j config and you should see a message in the console that the config was modified. Try visiting the invalid url again, and notice how there is now no log entry.
-</div>
-</div>
+</a>
+</a>
 
-<div id='faq'>
+<a name='faq'>
 ### FAQ
 
 <div id='what-next'>
@@ -222,27 +222,27 @@ git commit -am "Initial import"
 ```
 
 You can now customize the application and make it your own.
-</div>
+</a>
 
-<div id='make'>
+<a name='make'>
 #### make?
 
 Yes. Instead of having a bin directory with a whole bunch of scripts, it's much easier to have a `makefile` with very simple commands that take care of your project's frequently used tasks.
 
 `make` is also already on just about everyone's machine, unless you're on Windows. Even then, it's available.
-</div>
-<div id='have-you-tested-developing-on-windows'>
+</a>
+<a name='have-you-tested-developing-on-windows'>
 #### Have you tested developing on Windows?
 
 No. This has been build on OS X Yosemite and El Capitan. YMMV.
-</div>
-<div id='this-is-interesting-how-can-i-contribute'>
+</a>
+<a name='this-is-interesting-how-can-i-contribute'>
 #### This is interesting. How can I contribute?
 
 Check the issues and send a PR!
-</div>
-</div>
-<div id='useful-links'>
+</a>
+</a>
+<a name='useful-links'>
 ### Useful Links
 
 These came in handy while building Sparkler:
@@ -258,10 +258,10 @@ Flyway is a simple solution to a simple problem:
 * [flyway with H2](http://flywaydb.org/documentation/database/h2.html)
 * [flyway for an existing database setup](http://flywaydb.org/documentation/existing.html)
 * [Why migrate?](http://flywaydb.org/getstarted/why.html)
-</div>
-<div id='licensing'>
+</a>
+<a name='licensing'>
 ## License
 
 Released under the [Apache License, Version 2.0](./LICENSE.txt)
 [Credits](./CREDITS.txt)
-</div>
+</a>
