@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.testedminds</groupId>
   <artifactId>sparkler</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <url>https://github.com/saslani/sparkler</url>
   <name>Sparkler: A REST API microservice reference implementation</name>
   <description>

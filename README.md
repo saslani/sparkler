@@ -15,7 +15,6 @@ Sparkler isn't about the domain: It's about demonstrating everything else requir
 * [Getting Started](#getting-started)
 * [Public API](#public-api)
 * [Releasing](#releasing)
-    * [Update the version in pom.xml](#update-the-version-in-pomxml)
 * [Deploying to Heroku](#deploying-to-heroku)
     * [Heroku Toolbelt](#heroku-toolbelt)
     * [App setup](#app-setup)
@@ -89,6 +88,8 @@ See the [functional tests](./src/test/java/com/testedminds/template/RestfulApiFu
 
 ### Releasing
 
+#### Update the change log
+
 #### Update the version in pom.xml
 
 Versioning follows [Semantic Versioning](http://semver.org) conventions: major.minor.patch
@@ -98,14 +99,20 @@ Versioning follows [Semantic Versioning](http://semver.org) conventions: major.m
 * Backwards compatible features are a minor revision.
 * Follow the SemVer spec for anything else.
 
-Commit the appropriate version change, then tag the repo:
+Commit the appropriate version change: 
 
 ```
 git commit -am "Update version for release"
 git push
-git tag -a 1.0.0
+```
+
+#### Tag the release
+
+```
+git tag -a v1.0.0
 git push --tags
 ```
+
 
 ### Deploying to Heroku
 
