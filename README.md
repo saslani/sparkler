@@ -10,6 +10,26 @@ Sparkler's domain is an "Example" object with two string attributes.
 
 Sparkler isn't about the domain: It's about demonstrating everything else required to deploy a small but production-ready API, while keeping things fun and productive for developers and ops teams. Complicated domains shouldn't require complicated applications: Sparkler provides a simple foundation on which to build powerful Java-based REST API's. You can easily extend the application and make it your own.
 
+## Table of Contents
+* [Features](#features)
+* [Getting Started](#getting-started)
+* [Public API](#public-api)
+* [Releasing](#releasing)
+    * [Update the version in pom.xml](#update-the-version-in-pomxml)
+* [Deploying to Heroku](#deploying-to-heroku)
+    * [Heroku Toolbelt](#heroku-toolbelt)
+    * [App setup](#app-setup)
+    * [Ship it!](#ship-it)
+* [Deploying via Tarball](#deploying-via-tarball)
+    * [Create the release artifact](#create-the-release-artifact)
+    * [Run the release](#run-the-release)
+    * [Change the Log4j configuration at runtime (optional)](#change-the-log4j-configuration-at-runtime-optional)
+* [FAQ](#faq)
+    * [What next?](#what-next)
+    * [make?](#make)
+    * [Have you tested developing on Windows?](#have-you-tested-developing-on-windows)
+    * [This is interesting. How can I contribute?](#this-is-interesting-how-can-i-contribute)
+* [Useful Links](#useful-links)    
 
 ### Features
 
@@ -36,7 +56,6 @@ Ready for [Continuous Delivery](http://continuousdelivery.com):
 * Public API defined by automated tests, providing a meaningful semantic versioning contract.
 * Conforms to a [twelve-factor SaaS methodology](http://12factor.net).
 * Logging configured with Log4j 2. The config file is outside of the compiled application, allowing redefinition of logging behavior without stopping or redeploying the server.
-
 
 ### Getting Started
 
@@ -67,7 +86,6 @@ PUT: http://localhost:8081/examples/1 with JSON as in POST
 DELETE: http://localhost:8081/examples/1
 
 See the [functional tests](./src/test/java/com/testedminds/template/RestfulApiFunctionalTest.java) for the full contract with Examples.
-
 
 ### Releasing
 
@@ -106,7 +124,7 @@ brew install heroku-toolbelt
 
 Install the heroku-deploy plugin to support running from a jar instead of compiling on Heroku: `heroku plugins:install https://github.com/heroku/heroku-deploy`
 
-#### App Setup
+#### App setup
 
 Set up a free-tier version of the application on Heroku:
 
@@ -117,7 +135,7 @@ Take note of the name that Heroku assigns.
 
 Add a Postgres database: `heroku addons:create heroku-postgresql:hobby-dev`
 
-#### Ship It!
+#### Ship it!
 
 At the start of your session, set a `HEROKU_APP` environment variable with the name of your project. For example, if Heroku had assigned an application name of "polar-sea-31843", you could run `export HEROKU_APP=polar-sea-31843`. You can also set this variable in your `makefile` and commit it if you'll be using the same Heroku app over time.
 
@@ -130,7 +148,6 @@ Check the logs to ensure everything starts up correctly: `heroku logs --tail`
 Open up the app and ensure you see the welcome message: `heroku apps:open`
 
 If everything looks good, try out the Public API described above.
-
 
 ### Deploying via Tarball
 
@@ -164,7 +181,6 @@ Try hitting an invalid url like http://localhost:8081/examples/fubar. Note the W
 
 Edit `config/log4j2.xml` to change the com.testedminds logger level to error. Within 30 seconds (or the value you set in monitorInterval), the application will reload the log4j config and you should see a message in the console that the config was modified. Try visiting the invalid url again, and notice how there is now no log entry.
 
-
 ### FAQ
 
 #### What next?
@@ -179,7 +195,6 @@ git commit -am "Initial import"
 ```
 
 You can now customize the application and make it your own.
-
 
 #### make?
 
@@ -211,7 +226,8 @@ Flyway is a simple solution to a simple problem:
 * [flyway for an existing database setup](http://flywaydb.org/documentation/existing.html)
 * [Why migrate?](http://flywaydb.org/getstarted/why.html)
 
-## License
+### License
 
 Released under the [Apache License, Version 2.0](./LICENSE.txt)
+
 [Credits](./CREDITS.txt)
