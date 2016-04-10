@@ -59,16 +59,16 @@ public class Subscriber {
           try {
             HandlingResult result = handler.handle(message(delivery), headers(delivery));
             log(result);
-            acknowledge(channel, delivery);
+            ack(channel, delivery);
           } catch (Exception ex) {
-            reject(channel, delivery);
+            nack(channel, delivery);
           }
         });
       }
     }
   }
 
-  private void reject(Channel channel, QueueingConsumer.Delivery delivery) {
+  private void nack(Channel channel, QueueingConsumer.Delivery delivery) {
     try {
       long deliveryTag = delivery.getEnvelope().getDeliveryTag();
       channel.basicNack(deliveryTag, false, false);
@@ -78,11 +78,11 @@ public class Subscriber {
     }
   }
 
-  private void acknowledge(Channel channel, QueueingConsumer.Delivery delivery) {
+  private void ack(Channel channel, QueueingConsumer.Delivery delivery) {
     try {
       channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
     } catch (IOException e) {
-      throw new RuntimeException("Failed to acknowledge delivery:", e);
+      throw new RuntimeException("Failed to ack delivery:", e);
     }
   }
 
