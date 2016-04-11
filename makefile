@@ -3,6 +3,7 @@ SHELL := /usr/bin/env bash
 # metadata
 
 exec = exec:java -Dmaven.test.skip=true
+RABBITMQ_URL="amqp://guest:guest@localhost"
 
 ### pom.xml is the source of truth for project version and name (aka artifactId for maven)
 pom-version = /tmp/pom.version
