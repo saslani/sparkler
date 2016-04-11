@@ -3,6 +3,8 @@ package com.testedminds.template;
 import com.testedminds.template.db.DatabaseTestRunner;
 import com.testedminds.template.db.ExampleDao;
 import com.testedminds.template.messaging.Exchange;
+import com.testedminds.template.messaging.PersistentFanoutPublisher;
+import com.testedminds.template.messaging.Publisher;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.AfterClass;
@@ -18,6 +20,7 @@ public class FunctionalTestSuite {
   private static final String exchange = "sparkler.testing";
   private static CloseableHttpClient httpClient = HttpClientBuilder.create().build();
   protected static HttpTestUtils http = new HttpTestUtils(httpClient);
+  private static Publisher publisher;
   // NB: Composing rather than inheriting here to make BeforeClass behavior
   // in this class behave as expected. JUnit would normally run the
   private static DatabaseTestRunner dbTest = new DatabaseTestRunner();
@@ -28,12 +31,14 @@ public class FunctionalTestSuite {
   public static void setup() throws Exception {
     DatabaseTestRunner.migrateDatabase();
     Exchange.declare(exchange, "fanout", localAmqp);
-    new Routes(dao, PORT, exchange, localAmqp);
+    publisher = new PersistentFanoutPublisher(exchange, localAmqp);
+    new Routes(dao, PORT, publisher);
     Spark.awaitInitialization();
   }
 
   @AfterClass
   public static void stopServer() throws Exception {
+    publisher.close();
     Spark.stop();
     httpClient.close();
   }

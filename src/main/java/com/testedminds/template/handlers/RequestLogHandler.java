@@ -13,8 +13,8 @@ public class RequestLogHandler implements Filter {
   private final static Logger logger = LoggerFactory.getLogger(RequestLogHandler.class);
   private final Publisher publisher;
 
-  public RequestLogHandler(String exchangeName, String rabbitmqUrl) {
-    this.publisher = new PersistentFanoutPublisher(exchangeName, rabbitmqUrl);
+  public RequestLogHandler(Publisher publisher) {
+    this.publisher = publisher;
   }
 
   private String print(Request req) {
@@ -29,7 +29,7 @@ public class RequestLogHandler implements Filter {
   public void handle(Request request, Response response) throws Exception {
     String metadata = print(request);
     publisher.publish(metadata);
-//    publisher.close();
+
     logger.debug("sent " + metadata);
   }
 

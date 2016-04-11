@@ -4,6 +4,8 @@ import com.testedminds.template.db.DatabaseUrl;
 import com.testedminds.template.db.ExampleDao;
 import com.testedminds.template.db.Sql2oFactory;
 import com.testedminds.template.messaging.Exchange;
+import com.testedminds.template.messaging.PersistentFanoutPublisher;
+import com.testedminds.template.messaging.Publisher;
 import org.sql2o.Sql2o;
 
 import java.util.Map;
@@ -14,6 +16,7 @@ public class Server {
   public static void main(String[] args) throws Exception {
     String rabbitmqUrl = System.getenv("RABBITMQ_URL");
     Exchange.declare(EXCHANGE, "fanout", rabbitmqUrl);
+    Publisher publisher = new PersistentFanoutPublisher(EXCHANGE, rabbitmqUrl);
 
     String url = System.getenv("JDBC_DATABASE_URL");
     Map<String, String> params = DatabaseUrl.params(url);
@@ -21,6 +24,6 @@ public class Server {
     ExampleDao dao = new ExampleDao(db);
 
     int serverPort = Integer.parseInt(System.getenv("PORT"));
-    new Routes(dao, serverPort, EXCHANGE, rabbitmqUrl);
+    new Routes(dao, serverPort, publisher);
   }
 }

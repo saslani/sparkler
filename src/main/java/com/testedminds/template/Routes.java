@@ -2,13 +2,14 @@ package com.testedminds.template;
 
 import com.testedminds.template.db.ExampleDao;
 import com.testedminds.template.handlers.*;
+import com.testedminds.template.messaging.Publisher;
 import com.testedminds.template.util.Version;
 
 import static spark.Spark.*;
 
 public class Routes {
 
-  public Routes(ExampleDao dao, int serverPort, String exchangeName, String rabbitmqUrl) {
+  public Routes(ExampleDao dao, int serverPort, Publisher publisher) {
     port(serverPort);
 
     get("/", (req, res) ->
@@ -19,6 +20,6 @@ public class Routes {
     post("/examples", new PostExampleHandler(dao));
     put("/examples/:id", new PutExampleHandler(dao));
     delete("/examples/:id", new DeleteExampleHandler(dao));
-    after(new RequestLogHandler(exchangeName, rabbitmqUrl));
+    after(new RequestLogHandler(publisher));
   }
 }
