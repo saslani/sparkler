@@ -47,6 +47,9 @@ compile:
 package:
 	mvn package
 
+package-skip-test:
+	mvn package	-Dmaven.test.skip=true
+
 ### See http://flywaydb.org/documentation/maven/ for list of flyway commands
 ### example: make dev-db-migrate h2-shell
 dev-db-%: pom
