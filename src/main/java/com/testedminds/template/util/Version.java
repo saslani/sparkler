@@ -1,18 +1,26 @@
 package com.testedminds.template.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
+import java.io.InputStream;
+import java.util.Properties;
 
 public class Version {
 
-  public static String from(Class clazz) {
-    return parseClassLocation(clazz.getProtectionDomain().getCodeSource().getLocation().getPath());
-  }
+  private final static Logger logger = LoggerFactory.getLogger(Version.class);
 
-  static String parseClassLocation(String codePath) {
-    String maybeJar = new File(codePath).getName();
-    if (maybeJar.contains("test-classes")) return "test";
-    int dot = maybeJar.lastIndexOf(".");
-    if (dot < 0) return "development";
-    return maybeJar.substring(0, dot);
+  public static String get() {
+    try {
+      Properties prop = new Properties();
+      prop.load(Version.class.getResourceAsStream("/build.properties"));
+      String name = prop.getProperty("name");
+      String version = prop.getProperty("version");
+      return name + "-" + version;
+    } catch (Exception ex) {
+      logger.error("Could not load build.properties from project resources.");
+      return "";
+    }
   }
 }

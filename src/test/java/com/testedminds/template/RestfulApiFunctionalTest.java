@@ -13,7 +13,7 @@ public class RestfulApiFunctionalTest extends FunctionalTestSuite {
   @Test
   public void getRootIncludesVersionAndReturnsOK() throws Exception {
     String response = http.get(DEFAULT_HOST_URL, 200);
-    assertTrue(response.contains("Version: development"));
+    assertTrue(response.contains("Version: sparkler-"));
   }
 
   @Test

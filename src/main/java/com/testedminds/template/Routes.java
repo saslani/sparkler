@@ -12,11 +12,12 @@ import static spark.Spark.*;
 public class Routes {
 
   public Routes(ExampleDao dao, int serverPort) {
+    String version = Version.get();
+
     port(serverPort);
 
     get("/", (req, res) ->
-        "It's time to sparkle and shine! See the README to get started. Version: " +
-            Version.from(this.getClass()));
+        "It's time to sparkle and shine! See the README to get started. Version: " + version);
 
     get("/examples/:id", new GetExampleHandler(dao));
     post("/examples", new PostExampleHandler(dao));
