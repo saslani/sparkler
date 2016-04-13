@@ -1,32 +1,20 @@
 SHELL := /usr/bin/env bash
 
-# metadata
-
-exec = exec:java -Dmaven.test.skip=true
-
 ### pom.xml is the source of truth for project version and name (aka artifactId for maven)
-pom-version = /tmp/pom.version
-pom-name = /tmp/pom.name
 
-name = $(shell cat $(pom-name))
-version = $(shell cat $(pom-version))
+build-props = target/classes/build.properties
+$(build-props): compile
+get-prop = $(shell cat $(build-props) | grep $1 | cut -d '=' -f 2)
 
-$(pom-version): $(pom.name)
-	mvn help:evaluate -Dexpression=project.version | grep -v "INFO" > $@
-
-$(pom-name): pom.xml
-# Force maven to download all dependencies before attempting to read project metadata
-	mvn dependency:resolve
-	mvn help:evaluate -Dexpression=project.groupId
-	mvn help:evaluate -Dexpression=project.artifactId | grep -v "INFO" > $@
-
-pom: $(pom-name) $(pom-version)
-
-# development targets
+name = $(call get-prop,name)
+version = $(call get-prop,version)
+release = $(name)-$(version)
 
 port = 8081
 dev-db-conn = jdbc:h2://file/./target/db/$(name)
 server-db-conn = jdbc:h2://file/%/db/$(name)
+
+# development targets
 
 repl:
 	mvn groovy:shell
@@ -48,34 +36,34 @@ package:
 
 ### See http://flywaydb.org/documentation/maven/ for list of flyway commands
 ### example: make dev-db-migrate h2-shell
-dev-db-%: pom
+dev-db-%:
 	mvn compile flyway:$* -Dflyway.url=$(dev-db-conn)
 
-h2-shell: pom
-	-rlwrap mvn $(exec) -Dexec.mainClass=org.h2.tools.Shell \
+h2-shell:
+	-rlwrap mvn exec:java -Dmaven.test.skip=true -Dexec.mainClass=org.h2.tools.Shell \
 	-Dexec.args="-url $(dev-db-conn);AUTO_SERVER=TRUE"
 
 # deployable application targets
 
-server: pom db-migrate
-	-echo ./target/$(name)-$(version)-standalone | \
+server: db-migrate
+	-echo ./target/$(release)-standalone | \
 	xargs -I % bash -c "PORT=$(port) JDBC_DATABASE_URL=$(server-db-conn) %/bin/server.sh"
 
-db-migrate: pom package
-	-echo ./target/$(name)-$(version)-standalone | \
+db-migrate: package
+	-echo ./target/$(release)-standalone | \
 	xargs -I % bash -c "JDBC_DATABASE_URL=$(server-db-conn) %/bin/migrate.sh"
 
-tarball: pom package
-	tar czvf ./target/$(name)-$(version).tgz -C ./target $(name)-$(version)-standalone
+tarball: package
+	tar czvf ./target/$(release).tgz -C ./target $(release)-standalone
 
 # deployment
 
-heroku-deploy: check-env* clean pom package
-	cd ./target/$(name)-$(version)-standalone && \
+heroku-deploy: check-env* clean package
+	cd ./target/$(release)-standalone && \
 	cp ../../Procfile . && \
-	find ./* -name *.* -a ! -name *$(name)-$(version).jar* | \
+	find ./* -name *.* -a ! -name *$(release).jar* | \
 	tr '\n' ':' | \
-	xargs heroku deploy:jar --app $(HEROKU_APP) --jar lib/$(name)-$(version).jar --includes
+	xargs heroku deploy:jar --app $(HEROKU_APP) --jar lib/$(release).jar --includes
 
 heroku-jdbc-url: check-env*
 	heroku run echo \$$JDBC_DATABASE_URL --app $(HEROKU_APP)
