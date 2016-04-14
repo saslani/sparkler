@@ -16,7 +16,7 @@ server-db-conn = jdbc:h2://file/%/db/$(name)
 
 # development targets
 
-repl:
+repl: compile
 	mvn groovy:shell
 
 deps-tree:
