@@ -1,4 +1,4 @@
-## Sparkler - A REST API microservice reference implementation
+## Sparkler - A REST API microservice reference implementation in Java
 
 Sparkler isn't a library, and it isn't a framework. It's a Java application that illustrates some REST API design and workflow principles in action. JPetStore served a similar purpose for Java-based web applications in 2002.
 
