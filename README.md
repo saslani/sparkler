@@ -85,7 +85,7 @@ PUT: http://localhost:8081/examples/1 with JSON as in POST
 
 DELETE: http://localhost:8081/examples/1
 
-See the [functional tests](./src/test/java/com/testedminds/template/RestfulApiFunctionalTest.java) for the full contract with Examples.
+See the [functional tests](./src/test/java/com/testedminds/sparkler/RestfulApiFunctionalTest.java) for the full contract with Examples.
 
 ### Releasing
 
