@@ -40,7 +40,7 @@ RESTful:
 
 Persistent:
 
-* Automated database migrations with [Flyway](flywaydb.org).
+* Automated database migrations with [Flyway](https://flywaydb.org/).
 * Lightweight SQL to object mapping using [sql2o](http://www.sql2o.org).
 
 Developer-friendly:
